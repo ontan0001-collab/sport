@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>KBO 자동화 분석 시스템</title>
+<title>KBO 자동화 분석 시스템 v2</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -14,36 +14,49 @@
   --green:#3ddc84;--green-dim:#1a4a30;
   --red:#ff5f5f;--red-dim:#4a1a1a;
   --amber:#ffb84d;--amber-dim:#4a3010;
-  --purple:#a78bfa;
+  --purple:#a78bfa;--purple-dim:#2a1a5a;
+  --cyan:#00d4ff;--cyan-dim:#003a4a;
   --mono:'JetBrains Mono',monospace;
   --sans:'Noto Sans KR',sans-serif;
-  --r:8px;--r2:12px;--r3:16px;
+  --r:8px;--r2:12px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:13px;min-height:100vh}
 .app{max-width:1100px;margin:0 auto;padding:20px 14px}
 
 /* 헤더 */
-.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
-.logo{display:flex;align-items:center;gap:12px}
-.logo-mark{background:var(--blue2);color:#fff;font-family:var(--mono);font-size:12px;font-weight:600;padding:6px 14px;border-radius:6px;letter-spacing:1px}
-.logo-title{font-size:17px;font-weight:700;color:var(--text)}
-.logo-sub{font-size:11px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.logo-mark{background:var(--blue2);color:#fff;font-family:var(--mono);font-size:11px;font-weight:600;padding:5px 12px;border-radius:6px;letter-spacing:1px}
+.logo-v2{background:var(--amber-dim);color:var(--amber);font-family:var(--mono);font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;margin-left:6px}
+.page-title{font-size:16px;font-weight:700}
+.page-sub{font-size:11px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
 .live-pulse{display:inline-flex;align-items:center;gap:6px;background:var(--red-dim);border:1px solid var(--red);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--red);font-family:var(--mono)}
-.pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 1.4s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* 가상모드 배너 */
+.virtual-banner{background:var(--purple-dim);border:1px solid var(--purple);border-radius:var(--r2);padding:10px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.virtual-badge{background:var(--purple);color:#fff;font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px}
+
+/* 목표 진행바 */
+.goal-bar-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px 18px;margin-bottom:14px}
+.goal-row{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.goal-label{font-size:11px;font-family:var(--mono);color:var(--text3);min-width:80px}
+.goal-bar{flex:1;height:12px;background:var(--bg3);border-radius:6px;overflow:hidden;min-width:100px}
+.goal-fill{height:100%;border-radius:6px;transition:width .5s}
+.goal-val{font-size:12px;font-family:var(--mono);font-weight:700;min-width:80px;text-align:right}
 
 /* 탭 */
-.tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:20px;overflow-x:auto;scrollbar-width:none}
+.tabs{display:flex;gap:1px;border-bottom:1px solid var(--border);margin-bottom:18px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{padding:10px 18px;font-size:13px;cursor:pointer;border:none;background:none;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;font-family:var(--sans);transition:all .2s}
+.tab{padding:9px 15px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;font-family:var(--sans);transition:all .2s}
 .tab.on{color:var(--blue);border-bottom-color:var(--blue);font-weight:700}
 .tab:hover{color:var(--text2)}
 .sec{display:none}.sec.on{display:block}
 
 /* 카드 */
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:16px 18px;margin-bottom:12px}
-.card-hd{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-family:var(--mono)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:15px 17px;margin-bottom:12px}
+.card-hd{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:13px;font-family:var(--mono)}
 
 /* 그리드 */
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
@@ -52,80 +65,78 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:13
 .g5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:12px}
 @media(max-width:640px){.g5,.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}.g2{grid-template-columns:1fr}}
 
-/* 메트릭 카드 */
-.mc{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
+/* 메트릭 */
+.mc{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px 13px}
 .mc .lbl{font-size:10px;color:var(--text3);margin-bottom:5px;font-family:var(--mono);letter-spacing:.5px}
-.mc .val{font-size:22px;font-weight:700;font-family:var(--mono)}
+.mc .val{font-size:21px;font-weight:700;font-family:var(--mono)}
 .mc .sub{font-size:10px;color:var(--text3);margin-top:3px}
 .mc.up .val{color:var(--green)}
 .mc.dn .val{color:var(--red)}
 .mc.bl .val{color:var(--blue)}
 .mc.am .val{color:var(--amber)}
+.mc.pu .val{color:var(--purple)}
+.mc.cy .val{color:var(--cyan)}
 
 /* 배지 */
-.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;font-family:var(--mono);letter-spacing:.3px}
-.b-live{background:var(--red-dim);color:var(--red);animation:pulse 1.4s infinite}
-.b-sched{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
-.b-done{background:var(--bg3);color:var(--text3)}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;font-family:var(--mono)}
 .b-under{background:var(--blue-dim);color:var(--blue)}
 .b-over{background:var(--red-dim);color:var(--red)}
-.b-neutral{background:var(--bg3);color:var(--text3)}
 .b-win{background:var(--green-dim);color:var(--green)}
 .b-lose{background:var(--red-dim);color:var(--red)}
 .b-pend{background:var(--amber-dim);color:var(--amber)}
+.b-virtual{background:var(--purple-dim);color:var(--purple)}
+.b-real{background:var(--cyan-dim);color:var(--cyan)}
+.b-neutral{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
 .b-strong-u{background:#0d2a4a;color:var(--blue);border:1px solid var(--blue2)}
 .b-strong-o{background:var(--red-dim);color:var(--red);border:1px solid var(--red)}
 
-/* 경기 카드 */
-.game-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:16px 18px;margin-bottom:10px;cursor:pointer;transition:border-color .2s}
-.game-card:hover{border-color:var(--border2)}
-.game-card.picked-u{border:1px solid var(--blue)!important;background:#0d1a2e}
-.game-card.picked-o{border:1px solid var(--red)!important;background:#1a0d0d}
-.gc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px}
-.gc-body{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
-.gc-team{font-size:15px;font-weight:700}
-.gc-stat{font-size:10px;color:var(--text3);margin-top:3px;font-family:var(--mono)}
-.gc-vs{text-align:center}
-.gc-score{font-size:26px;font-weight:700;font-family:var(--mono);text-align:center;letter-spacing:3px;min-width:90px}
-.gc-score.live{color:var(--blue)}
-.gc-score.done{color:var(--text3)}
-.gc-info{font-size:10px;color:var(--text3);text-align:center;margin-top:2px;font-family:var(--mono)}
-
-/* 언더/오버 바 */
-.ou-bar{display:flex;height:26px;border-radius:6px;overflow:hidden;margin:10px 0}
-.ou-u{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:var(--blue-dim);color:var(--blue);font-family:var(--mono)}
-.ou-o{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:var(--red-dim);color:var(--red);font-family:var(--mono)}
-
-/* 배팅 버튼 */
-.bet-btns{display:flex;gap:8px}
-.bet-btn{flex:1;padding:9px 6px;border-radius:var(--r);border:1px solid var(--border);background:var(--bg3);font-size:12px;text-align:center;cursor:pointer;transition:all .2s;font-family:var(--sans)}
-.bet-btn:hover{border-color:var(--border2)}
-.bet-btn.pu{border:1px solid var(--blue)!important;background:var(--blue-dim)!important}
-.bet-btn.po{border:1px solid var(--red)!important;background:var(--red-dim)!important}
-.bet-type{font-size:10px;color:var(--text3);margin-bottom:2px;font-family:var(--mono)}
-.bet-odds{font-size:17px;font-weight:700;font-family:var(--mono)}
-.bet-pct{font-size:10px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
-
-/* 시그널 */
-.signal{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;font-family:var(--mono)}
-.sig-dot{width:8px;height:8px;border-radius:50%}
-
 /* 입력 */
-input,select,textarea{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:8px 12px;color:var(--text);font-size:13px;font-family:var(--sans);width:100%;transition:border-color .2s}
+input,select,textarea{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:8px 11px;color:var(--text);font-size:13px;font-family:var(--sans);width:100%;transition:border-color .2s}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue2)}
-label{font-size:11px;color:var(--text3);margin-bottom:4px;display:block;font-family:var(--mono);letter-spacing:.3px}
+label{font-size:11px;color:var(--text3);margin-bottom:4px;display:block;font-family:var(--mono)}
 select option{background:var(--bg3)}
 
 /* 버튼 */
 .btn{padding:9px 18px;border-radius:var(--r);border:1px solid var(--border2);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;font-family:var(--sans)}
 .btn-blue{background:var(--blue2);color:#fff;border-color:var(--blue2)}.btn-blue:hover{background:var(--blue)}
 .btn-blue:disabled{background:var(--bg3);color:var(--text3);border-color:var(--border);cursor:not-allowed}
+.btn-purple{background:var(--purple-dim);color:var(--purple);border-color:var(--purple)}.btn-purple:hover{background:var(--purple);color:#fff}
+.btn-green{background:var(--green-dim);color:var(--green);border-color:var(--green)}.btn-green:hover{background:var(--green);color:#000}
 .btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}.btn-ghost:hover{border-color:var(--border2);color:var(--text)}
 .btn-sm{padding:4px 10px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);font-size:11px;cursor:pointer;color:var(--text3);font-family:var(--mono)}.btn-sm:hover{border-color:var(--border2);color:var(--text2)}
 
-/* 폼 그리드 */
-.fgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px}
-@media(max-width:640px){.fgrid{grid-template-columns:1fr}}
+/* 경기 카드 */
+.game-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:15px 17px;margin-bottom:10px}
+.gc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px}
+.gc-body{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-bottom:10px}
+.gc-team{font-size:15px;font-weight:700}
+.gc-stat{font-size:10px;color:var(--text3);margin-top:3px;font-family:var(--mono)}
+.gc-score{font-size:24px;font-weight:700;font-family:var(--mono);text-align:center;letter-spacing:2px;color:var(--text3)}
+
+/* 선발 투수 입력 */
+.pitcher-input{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:10px}
+.pitcher-row{display:grid;grid-template-columns:1fr 80px 1fr 80px;gap:8px;align-items:center;margin-bottom:6px}
+.pitcher-row:last-child{margin-bottom:0}
+.pitcher-label{font-size:10px;color:var(--text3);font-family:var(--mono);grid-column:span 4;margin-bottom:4px}
+
+/* O/U 바 */
+.ou-bar{display:flex;height:24px;border-radius:6px;overflow:hidden;margin:8px 0}
+.ou-u{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:var(--blue-dim);color:var(--blue);font-family:var(--mono)}
+.ou-o{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:var(--red-dim);color:var(--red);font-family:var(--mono)}
+
+/* 배팅 버튼 */
+.bet-btns{display:flex;gap:8px}
+.bet-btn{flex:1;padding:8px 6px;border-radius:var(--r);border:1px solid var(--border);background:var(--bg3);font-size:12px;text-align:center;cursor:pointer;transition:all .2s}
+.bet-btn:hover{border-color:var(--border2)}
+.bet-btn.pu{border:1px solid var(--blue);background:var(--blue-dim)}
+.bet-btn.po{border:1px solid var(--red);background:var(--red-dim)}
+.bet-type{font-size:10px;color:var(--text3);margin-bottom:2px;font-family:var(--mono)}
+.bet-odds{font-size:17px;font-weight:700;font-family:var(--mono)}
+.bet-pct{font-size:10px;color:var(--text3);margin-top:1px}
+
+/* 프로그레스 */
+.prog{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;margin:4px 0}
+.prog-fill{height:100%;border-radius:4px;transition:width .5s}
 
 /* 테이블 */
 .tbl{width:100%;border-collapse:collapse;font-size:12px}
@@ -134,133 +145,128 @@ select option{background:var(--bg3)}
 .tbl tr:last-child td{border-bottom:none}
 .tbl tr:hover td{background:var(--bg3)}
 
-/* 프로그레스 */
-.prog{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;margin:4px 0}
-.prog-fill{height:100%;border-radius:4px;transition:width .5s}
-
 /* 켈리 게이지 */
 .k-gauge{display:flex;align-items:center;gap:10px;margin:10px 0}
 .k-bar{flex:1;height:20px;background:var(--bg3);border-radius:10px;overflow:hidden}
 .k-fill{height:100%;border-radius:10px;transition:width .4s}
 
-/* AI 결과 */
-.ai-result{margin-top:12px;font-size:13px;line-height:1.8;white-space:pre-line;padding:14px 16px;background:var(--bg3);border:1px solid var(--blue-dim);border-left:3px solid var(--blue2);border-radius:var(--r);display:none;color:var(--text)}
-
-/* 경고 */
+/* 경고/안내 */
 .warn{background:var(--amber-dim);border:1px solid var(--amber);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--amber);margin-bottom:14px;line-height:1.65}
+.info{background:var(--blue-dim);border:1px solid var(--blue2);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--blue);margin-bottom:14px;line-height:1.65}
+.success{background:var(--green-dim);border:1px solid var(--green);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--green);margin-bottom:14px;line-height:1.65}
 
-/* 구분선 */
-hr{border:none;border-top:1px solid var(--border);margin:14px 0}
+/* AI 결과 */
+.ai-out{margin-top:12px;font-size:13px;line-height:1.8;white-space:pre-line;padding:14px 16px;background:var(--bg3);border:1px solid var(--blue-dim);border-left:3px solid var(--blue2);border-radius:var(--r);display:none;color:var(--text)}
 
 /* 스피너 */
 .spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(77,159,255,.2);border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:5px}
 @keyframes sp{to{transform:rotate(360deg)}}
 
-/* 스코어 진행바 */
-.score-prog{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:8px;position:relative}
-.score-line-marker{position:absolute;width:2px;height:100%;background:var(--text3);top:0}
-
-/* 순위표 */
-.rank-row{display:flex;align-items:center;padding:8px 10px;border-bottom:1px solid var(--border)}
-.rank-row:last-child{border-bottom:none}
-.rank-num{font-family:var(--mono);font-size:13px;font-weight:700;min-width:28px;color:var(--text3)}
-.rank-team{font-weight:700;flex:1}
-.rank-val{font-family:var(--mono);font-size:12px;min-width:60px;text-align:right;color:var(--text2)}
-
 /* 예산바 */
 .bud-bar{height:12px;background:var(--bg3);border-radius:6px;overflow:hidden;margin:6px 0}
 .bud-fill{height:100%;border-radius:6px;transition:width .4s}
 
-/* AI 픽 하이라이트 */
-.ai-pick-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-top:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.ai-pick-main{font-size:16px;font-weight:700;font-family:var(--mono)}
-.ai-conf{display:flex;align-items:center;gap:6px;font-size:11px;font-family:var(--mono);color:var(--text3)}
-
-/* 자동분석 배너 */
-.auto-banner{background:linear-gradient(135deg,var(--blue-dim),var(--bg3));border:1px solid var(--blue2);border-radius:var(--r2);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+/* 자동화 배너 */
+.auto-banner{background:linear-gradient(135deg,var(--blue-dim),var(--bg3));border:1px solid var(--blue2);border-radius:var(--r2);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .auto-status{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:var(--mono)}
+
+/* 검증 대시보드 */
+.verify-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:8px}
+.verify-label{font-size:10px;font-family:var(--mono);color:var(--text3);margin-bottom:6px}
+.verify-val{font-size:22px;font-weight:700;font-family:var(--mono)}
+
+/* 알림 팝업 */
+.alert-popup{position:fixed;top:20px;right:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px 18px;font-size:13px;z-index:999;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.5);display:none;animation:slideIn .3s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+
+/* 모달 */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:22px 24px;width:min(460px,95vw);max-height:90vh;overflow-y:auto}
+.modal-title{font-size:15px;font-weight:700;margin-bottom:16px}
+.fgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px}
+@media(max-width:640px){.fgrid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="app">
 
+<!-- 알림 팝업 -->
+<div class="alert-popup" id="alert-popup"></div>
+
 <!-- 헤더 -->
 <div class="header">
-  <div class="logo">
-    <span class="logo-mark">KBO PRO</span>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="display:flex;align-items:center;gap:6px">
+      <span class="logo-mark">KBO PRO</span>
+      <span class="logo-v2">v2.0</span>
+    </div>
     <div>
-      <div class="logo-title">KBO 자동화 분석 시스템</div>
-      <div class="logo-sub">AUTO BETMAN · KELLY · RECORD MGR · AI PREDICT</div>
+      <div class="page-title">KBO 자동화 분석 시스템</div>
+      <div class="page-sub">선발투수입력 · 가상배팅 · 목표관리 · 적중률검증</div>
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-    <div class="live-pulse"><span class="pulse-dot"></span><span id="clock-display">--:--:--</span></div>
-    <button class="btn btn-ghost" style="font-size:12px" onclick="exportCSV()">내보내기</button>
-    <button class="btn btn-ghost" style="font-size:12px" onclick="openBudget()">예산설정</button>
+    <div class="live-pulse"><span class="pulse-dot"></span><span id="clock">--:--:--</span></div>
+    <button class="btn btn-ghost" style="font-size:11px" onclick="toggleVirtualMode()">
+      <span id="mode-btn-txt">가상모드 ON</span>
+    </button>
+    <button class="btn btn-ghost" style="font-size:11px" onclick="openModal('goal')">목표설정</button>
+    <button class="btn btn-ghost" style="font-size:11px" onclick="openModal('budget')">예산설정</button>
+    <button class="btn btn-ghost" style="font-size:11px" onclick="exportCSV()">내보내기</button>
   </div>
 </div>
 
-<!-- API 키 설정 -->
-<div id="api-key-card" class="card" style="margin-bottom:12px;border:1px solid var(--amber)">
-  <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
-    <div style="flex:1;min-width:240px">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-        <span style="font-size:14px">🔑</span>
-        <span style="font-size:12px;font-weight:700;color:var(--amber);font-family:var(--mono)">Anthropic API 키 설정 (AI 분석 필수)</span>
-      </div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.6">
-        로컬에서 실행 시 AI 분석에 API 키가 필요합니다.<br>
-        <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:var(--blue)">console.anthropic.com</a> 에서 발급 후 입력하세요. 키는 브라우저에만 저장되며 외부로 전송되지 않습니다.
-      </div>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-        <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." style="flex:1;min-width:220px;font-family:var(--mono);font-size:12px;border-color:var(--amber)">
-        <button class="btn btn-blue" onclick="saveApiKey()" style="white-space:nowrap">저장</button>
-        <button class="btn btn-ghost" onclick="clearApiKey()" style="white-space:nowrap;font-size:11px">초기화</button>
-      </div>
-    </div>
-    <div id="api-key-status" style="font-size:11px;font-family:var(--mono);padding:8px 12px;border-radius:var(--r);background:var(--bg3);min-width:150px;text-align:center;align-self:flex-end">
-      상태: 미설정
-    </div>
+<!-- 가상 배팅 모드 배너 -->
+<div class="virtual-banner" id="virtual-banner" style="display:none">
+  <div style="display:flex;align-items:center;gap:10px">
+    <span class="virtual-badge">VIRTUAL MODE</span>
+    <span style="font-size:12px;color:var(--text2)">가상 배팅 중 — 실제 돈이 사용되지 않습니다</span>
   </div>
+  <div style="font-size:11px;color:var(--text3);font-family:var(--mono)" id="virtual-stats">가상 적중률: -% | 가상 손익: 0원</div>
 </div>
 
-<!-- 예산 현황 바 -->
-<div class="card" style="margin-bottom:16px">
-  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
-    <div class="card-hd" style="margin-bottom:0">이번 달 예산 현황</div>
-    <span id="bud-month" style="font-size:10px;color:var(--text3);font-family:var(--mono)"></span>
+<!-- 목표 진행바 -->
+<div class="goal-bar-wrap" id="goal-bar-wrap">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px">
+    <span style="font-size:11px;font-weight:700;font-family:var(--mono);color:var(--text2)">이번 달 목표 현황</span>
+    <span style="font-size:10px;color:var(--text3);font-family:var(--mono)" id="goal-month-label"></span>
   </div>
-  <div class="g4">
-    <div class="mc"><div class="lbl">월 예산</div><div class="val" id="bud-limit">-</div></div>
-    <div class="mc"><div class="lbl">사용 금액</div><div class="val" id="bud-used">-</div></div>
-    <div class="mc"><div class="lbl">잔여</div><div class="val bl" id="bud-remain">-</div></div>
-    <div class="mc"><div class="lbl">이달 손익</div><div class="val" id="bud-pnl">-</div></div>
+  <div class="goal-row">
+    <span class="goal-label">수익 목표</span>
+    <div class="goal-bar"><div class="goal-fill" id="goal-profit-bar" style="width:0%;background:var(--green)"></div></div>
+    <span class="goal-val" id="goal-profit-val" style="color:var(--green)">0 / 0원</span>
   </div>
-  <div class="bud-bar"><div class="bud-fill" id="bud-fill" style="width:0%"></div></div>
-  <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:3px;font-family:var(--mono)">
-    <span>0%</span><span id="bud-pct">사용 0%</span><span>100%</span>
+  <div class="goal-row">
+    <span class="goal-label">적중률 목표</span>
+    <div class="goal-bar"><div class="goal-fill" id="goal-hit-bar" style="width:0%;background:var(--blue)"></div></div>
+    <span class="goal-val" id="goal-hit-val" style="color:var(--blue)">0% / 0%</span>
+  </div>
+  <div class="goal-row">
+    <span class="goal-label">예산 사용</span>
+    <div class="goal-bar"><div class="goal-fill" id="bud-fill" style="width:0%;background:var(--amber)"></div></div>
+    <span class="goal-val" id="bud-pct-val" style="color:var(--amber)">0원 / 0원</span>
   </div>
 </div>
 
 <div class="tabs">
-  <button class="tab on" onclick="showTab('today',this)">오늘 경기 분석</button>
-  <button class="tab" onclick="showTab('auto',this)">자동 AI 예측</button>
-  <button class="tab" onclick="showTab('kelly',this)">켈리 계산기</button>
+  <button class="tab on" onclick="showTab('today',this)">오늘 경기</button>
+  <button class="tab" onclick="showTab('auto',this)">AI 자동예측</button>
+  <button class="tab" onclick="showTab('kelly',this)">켈리 계산</button>
   <button class="tab" onclick="showTab('record',this)">배팅 기록</button>
+  <button class="tab" onclick="showTab('verify',this)">적중률 검증</button>
   <button class="tab" onclick="showTab('stats',this)">성과 분석</button>
-  <button class="tab" onclick="showTab('standing',this)">팀 순위·통계</button>
+  <button class="tab" onclick="showTab('standing',this)">팀 순위</button>
 </div>
 
-<!-- ============================================
-     탭1: 오늘 경기 분석
-============================================ -->
+<!-- ==================== 탭1: 오늘 경기 ==================== -->
 <div class="sec on" id="sec-today">
   <div class="auto-banner">
     <div class="auto-status">
-      <span class="pulse-dot" style="background:var(--blue);animation:pulse 2s infinite"></span>
+      <span class="pulse-dot" style="color:var(--blue)"></span>
       <span>2026년 4월 1일 (수) · KBO 5경기 · 18:30 시작</span>
     </div>
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <div style="display:flex;gap:8px;align-items:center">
       <select id="line-sel" onchange="renderGames()" style="width:110px;font-size:12px">
         <option value="7">기준 7점</option>
         <option value="7.5" selected>기준 7.5점</option>
@@ -269,27 +275,33 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
         <option value="9">기준 9점</option>
         <option value="9.5">기준 9.5점</option>
       </select>
-      <button class="btn btn-ghost" style="font-size:11px" onclick="renderGames()">↻ 새로고침</button>
     </div>
   </div>
 
   <div class="g5" id="today-summary"></div>
+
+  <!-- 선발 투수 입력 패널 -->
+  <div class="card">
+    <div class="card-hd">선발 투수 직접 입력 (매 경기 전 업데이트)</div>
+    <div class="info" style="margin-bottom:12px">선발 투수와 실제 ERA를 입력하면 AI 예측 정확도가 높아집니다. 공식 발표 후 입력하세요.</div>
+    <div id="pitcher-inputs"></div>
+    <button class="btn btn-green" onclick="applyPitchers()" style="width:100%;margin-top:8px">선발 투수 적용 → 분석 업데이트</button>
+  </div>
+
   <div id="games-list"></div>
 
   <div class="card">
-    <div class="card-hd">내 픽 요약</div>
+    <div class="card-hd">내 픽 요약 <span id="pick-mode-badge"></span></div>
     <div id="pick-summary"><span style="color:var(--text3);font-size:12px">경기 카드에서 언더/오버를 선택하세요.</span></div>
   </div>
 </div>
 
-<!-- ============================================
-     탭2: 자동 AI 예측
-============================================ -->
+<!-- ==================== 탭2: AI 자동예측 ==================== -->
 <div class="sec" id="sec-auto">
-  <div class="warn">AI 예측은 통계 기반 참고 정보입니다. 배팅 결정의 책임은 본인에게 있으며 잃어도 괜찮은 금액만 사용하세요.</div>
+  <div class="warn">AI 예측은 통계 기반 참고 정보입니다. 배팅 결정의 책임은 본인에게 있습니다.</div>
 
   <div class="auto-banner">
-    <div class="auto-status"><span class="pulse-dot" style="background:var(--green)"></span>자동 분석 엔진 준비 완료 · 오늘 5경기 일괄 분석 가능</div>
+    <div class="auto-status"><span class="pulse-dot" style="color:var(--green)"></span>AI 분석 엔진 준비 완료 · 선발투수 데이터 반영</div>
     <button class="btn btn-blue" id="auto-all-btn" onclick="runAutoAll()">전 경기 일괄 AI 분석</button>
   </div>
 
@@ -310,25 +322,20 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
     </div>
   </div>
 
-  <div style="font-size:11px;color:var(--text3);margin-bottom:8px;font-family:var(--mono)">분석 조건 선택</div>
-  <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px">
-    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--text2)"><input type="checkbox" id="chk-era" checked style="width:auto"> 선발 ERA 분석</label>
-    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--text2)"><input type="checkbox" id="chk-ops" checked style="width:auto"> 팀 타격 OPS</label>
-    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--text2)"><input type="checkbox" id="chk-streak" checked style="width:auto"> 최근 연속 이력</label>
-    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--text2)"><input type="checkbox" id="chk-h2h" checked style="width:auto"> 상대 전적 (5년)</label>
-    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--text2)"><input type="checkbox" id="chk-venue" checked style="width:auto"> 구장 특성</label>
-    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--text2)"><input type="checkbox" id="chk-kelly" checked style="width:auto"> 켈리 배팅금 자동 계산</label>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+    <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text2)"><input type="checkbox" id="chk-era" checked style="width:auto"> 선발 ERA</label>
+    <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text2)"><input type="checkbox" id="chk-ops" checked style="width:auto"> 팀 OPS</label>
+    <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text2)"><input type="checkbox" id="chk-streak" checked style="width:auto"> 연속 이력</label>
+    <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text2)"><input type="checkbox" id="chk-h2h" checked style="width:auto"> 상대전적 5년</label>
+    <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text2)"><input type="checkbox" id="chk-venue" checked style="width:auto"> 구장 특성</label>
+    <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text2)"><input type="checkbox" id="chk-kelly" checked style="width:auto"> 켈리 배팅금 계산</label>
   </div>
-  <button class="btn btn-blue" id="auto-btn" onclick="runAutoSingle()" style="width:100%;margin-bottom:14px">단일 경기 AI 분석 실행</button>
-  <div class="ai-result" id="auto-result"></div>
-
-  <!-- 전경기 일괄 결과 -->
+  <button class="btn btn-blue" id="auto-btn" onclick="runAutoSingle()" style="width:100%;margin-bottom:12px">단일 경기 AI 분석</button>
+  <div class="ai-out" id="auto-result"></div>
   <div id="auto-all-results"></div>
 </div>
 
-<!-- ============================================
-     탭3: 켈리 계산기
-============================================ -->
+<!-- ==================== 탭3: 켈리 계산 ==================== -->
 <div class="sec" id="sec-kelly">
   <div class="g2">
     <div class="card">
@@ -337,7 +344,8 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
         <div><label>총 배팅 자금 (원)</label><input type="number" id="k-bank" value="500000" step="10000" oninput="calcKelly()"></div>
         <div><label>AI 예측 적중 확률 (%)</label><input type="number" id="k-prob" value="62" step="1" min="1" max="99" oninput="calcKelly()"></div>
         <div><label>배당률</label><input type="number" id="k-odds" value="1.85" step="0.01" min="1.01" oninput="calcKelly()"></div>
-        <div><label>안전 계수</label>
+        <div>
+          <label>안전 계수</label>
           <select id="k-frac" onchange="calcKelly()">
             <option value="0.25">1/4 켈리 (매우 보수)</option>
             <option value="0.5" selected>1/2 켈리 (권장)</option>
@@ -351,12 +359,12 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
       <div class="card-hd">계산 결과</div>
       <div class="g2" style="margin-bottom:12px">
         <div class="mc"><div class="lbl">엣지</div><div class="val" id="k-edge">-</div><div class="sub">양수여야 유효</div></div>
-        <div class="mc"><div class="lbl">배팅 비율</div><div class="val" id="k-pct">-</div><div class="sub">자금 대비</div></div>
+        <div class="mc"><div class="lbl">배팅 비율</div><div class="val" id="k-pct">-</div></div>
       </div>
       <div class="k-gauge"><div class="k-bar"><div class="k-fill" id="k-bar" style="width:0%"></div></div><span style="font-family:var(--mono);font-size:12px;min-width:45px;text-align:right;color:var(--text2)" id="k-bar-pct">0%</span></div>
-      <div style="background:var(--bg3);border-radius:var(--r);padding:13px;margin-top:12px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-          <span style="font-size:12px;color:var(--text3);font-family:var(--mono)">추천 배팅금</span>
+      <div style="background:var(--bg3);border-radius:var(--r);padding:13px;margin-top:10px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:7px">
+          <span style="font-size:12px;color:var(--text3)">추천 배팅금</span>
           <span style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--blue)" id="k-amount">-</span>
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
@@ -372,7 +380,7 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
     </div>
   </div>
   <div class="card">
-    <div class="card-hd">100회 배팅 시뮬레이션</div>
+    <div class="card-hd">100회 시뮬레이션</div>
     <div class="g3" style="margin-bottom:12px">
       <div class="mc"><div class="lbl">기대 최종 자금</div><div class="val" id="sim-final">-</div></div>
       <div class="mc"><div class="lbl">예상 최대 하락</div><div class="val dn" id="sim-dd">-</div></div>
@@ -384,24 +392,22 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
       <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:2px;background:var(--green);display:inline-block"></span>낙관</span>
       <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:2px;background:var(--red);display:inline-block"></span>비관</span>
     </div>
-    <button class="btn btn-ghost" style="margin-top:12px;width:100%;font-size:12px" onclick="runSim()">시뮬레이션 다시 실행</button>
+    <button class="btn btn-ghost" style="margin-top:12px;width:100%;font-size:12px" onclick="runSim()">다시 실행</button>
   </div>
   <div class="card">
-    <div class="card-hd">배당별 손익분기 테이블</div>
-    <div style="overflow-x:auto">
-      <table class="tbl"><thead><tr><th>배당률</th><th>손익분기 적중률</th><th>10경기 필요 적중</th><th>20경기 필요 적중</th><th>판정</th></tr></thead>
-      <tbody id="be-table"></tbody></table>
-    </div>
+    <div class="card-hd">배당률별 손익분기</div>
+    <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>배당</th><th>손익분기 적중률</th><th>10경기 최소</th><th>20경기 최소</th><th>판정</th></tr></thead><tbody id="be-table"></tbody></table></div>
   </div>
 </div>
 
-<!-- ============================================
-     탭4: 배팅 기록
-============================================ -->
+<!-- ==================== 탭4: 배팅 기록 ==================== -->
 <div class="sec" id="sec-record">
   <div class="g5" id="rec-summary"></div>
+
   <div class="card">
-    <div class="card-hd">새 배팅 등록</div>
+    <div class="card-hd">새 배팅 등록
+      <span id="rec-mode-label" style="margin-left:8px"></span>
+    </div>
     <div class="fgrid">
       <div><label>날짜</label><input type="date" id="r-date"></div>
       <div><label>경기</label>
@@ -423,46 +429,84 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
       <div><label>AI 신뢰도 (%)</label><input type="number" id="r-conf" value="62" step="1" min="0" max="100"></div>
       <div><label>결과</label>
         <select id="r-result">
-          <option value="pending">미결 (예정/진행중)</option>
+          <option value="pending">미결 (진행중)</option>
           <option value="win">적중</option>
           <option value="lose">미적중</option>
-          <option value="push">푸시 (환불)</option>
+          <option value="push">푸시</option>
         </select>
       </div>
       <div><label>메모</label><input type="text" id="r-memo" placeholder="선발, 날씨 등"></div>
     </div>
-    <div style="display:flex;gap:8px">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn btn-blue" onclick="addRecord()">등록</button>
       <button class="btn btn-ghost" onclick="clearRec()">초기화</button>
+      <button class="btn btn-purple" onclick="addVirtualRecord()" title="가상 배팅으로 등록">가상 배팅 등록</button>
     </div>
     <div id="rec-msg" style="margin-top:6px;font-size:11px;font-family:var(--mono)"></div>
   </div>
+
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
       <div class="card-hd" style="margin-bottom:0">배팅 기록</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <select id="f-month" onchange="renderRecs()" style="width:120px;font-size:12px"><option value="all">전체 기간</option></select>
+        <select id="f-month" onchange="renderRecs()" style="width:120px;font-size:12px"><option value="all">전체</option></select>
         <select id="f-result" onchange="renderRecs()" style="width:90px;font-size:12px"><option value="all">전체</option><option value="win">적중</option><option value="lose">미적중</option><option value="pending">미결</option></select>
         <select id="f-type" onchange="renderRecs()" style="width:85px;font-size:12px"><option value="all">전체</option><option value="under">언더</option><option value="over">오버</option></select>
+        <select id="f-mode" onchange="renderRecs()" style="width:90px;font-size:12px"><option value="all">전체</option><option value="real">실제</option><option value="virtual">가상</option></select>
       </div>
     </div>
     <div style="overflow-x:auto">
       <table class="tbl">
-        <thead><tr><th>날짜</th><th>경기</th><th>픽</th><th>기준</th><th>배당</th><th>금액</th><th>신뢰도</th><th>결과</th><th>손익</th><th>메모</th><th></th></tr></thead>
+        <thead><tr><th>날짜</th><th>모드</th><th>경기</th><th>픽</th><th>배당</th><th>금액</th><th>신뢰도</th><th>결과</th><th>손익</th><th>메모</th><th></th></tr></thead>
         <tbody id="rec-tbody"></tbody>
       </table>
     </div>
-    <div id="rec-empty" style="text-align:center;padding:28px;color:var(--text3);font-size:12px;display:none">배팅 기록이 없습니다.</div>
+    <div id="rec-empty" style="text-align:center;padding:28px;color:var(--text3);font-size:12px;display:none">기록 없음</div>
   </div>
 </div>
 
-<!-- ============================================
-     탭5: 성과 분석
-============================================ -->
+<!-- ==================== 탭5: 적중률 검증 ==================== -->
+<div class="sec" id="sec-verify">
+  <div class="info">가상 배팅 데이터를 분석합니다. <strong>최소 50경기 이상 가상 배팅</strong> 후 실제 배팅을 권장합니다. 적중률 57% 이상이어야 수익 가능합니다.</div>
+
+  <div class="g4" id="verify-kpi"></div>
+
+  <div class="card">
+    <div class="card-hd">가상 vs 실제 배팅 비교</div>
+    <div style="position:relative;height:200px"><canvas id="verifyChart"></canvas></div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-hd">신뢰도 구간별 검증</div>
+      <div id="verify-conf"></div>
+      <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:var(--r);font-size:11px;color:var(--text3);line-height:1.7">
+        신뢰도 65% 이상에서 적중률이 57%를 넘으면<br>실제 배팅을 고려해볼 수 있습니다.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">실제 배팅 시작 권고 기준</div>
+      <div id="readiness-check"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">AI 신뢰도 캘리브레이션 분석</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:10px">AI가 60%라고 한 경기의 실제 적중률과 비교합니다. 수치가 가까울수록 AI 예측이 정확합니다.</div>
+    <div style="overflow-x:auto">
+      <table class="tbl">
+        <thead><tr><th>AI 신뢰도</th><th>경기 수</th><th>실제 적중</th><th>실제 적중률</th><th>오차</th><th>판정</th></tr></thead>
+        <tbody id="calibration-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 탭6: 성과 분석 ==================== -->
 <div class="sec" id="sec-stats">
   <div class="g4" id="stats-kpi"></div>
   <div class="card">
-    <div class="card-hd">월별 손익 추이</div>
+    <div class="card-hd">월별 손익 추이 (실제)</div>
     <div style="position:relative;height:200px"><canvas id="monthly-chart"></canvas></div>
   </div>
   <div class="g2">
@@ -488,29 +532,27 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
   </div>
 </div>
 
-<!-- ============================================
-     탭6: 팀 순위·통계
-============================================ -->
+<!-- ==================== 탭7: 팀 순위 ==================== -->
 <div class="sec" id="sec-standing">
-  <div class="auto-banner" style="margin-bottom:16px">
-    <div class="auto-status"><span class="pulse-dot" style="background:var(--amber)"></span>2026 KBO 시즌 데이터 · 3월 28일 개막 · 통계 기반</div>
-    <span style="font-size:10px;color:var(--text3);font-family:var(--mono)">최신 공식 데이터는 KBO 공식앱·네이버 스포츠 확인 권장</span>
+  <div class="auto-banner">
+    <div class="auto-status"><span class="pulse-dot" style="color:var(--amber)"></span>2026 KBO 시즌 · 시즌 초반 데이터</div>
+    <span style="font-size:10px;color:var(--text3);font-family:var(--mono)">최신 데이터는 KBO 공식앱 확인 권장</span>
   </div>
   <div class="g2">
     <div class="card">
-      <div class="card-hd">2026 팀 순위</div>
+      <div class="card-hd">2026 현재 순위</div>
       <div id="standing-list"></div>
     </div>
     <div class="card">
-      <div class="card-hd">팀별 언더/오버 성향 (5년 통계)</div>
+      <div class="card-hd">팀별 5년 오버율</div>
       <div id="team-ou"></div>
     </div>
   </div>
   <div class="card">
-    <div class="card-hd">오늘 경기 팀 분석 (4월 1일)</div>
+    <div class="card-hd">오늘 경기 분석 테이블</div>
     <div style="overflow-x:auto">
       <table class="tbl">
-        <thead><tr><th>경기</th><th>홈팀 ERA</th><th>원팀 ERA</th><th>홈 OPS</th><th>원 OPS</th><th>예상합산</th><th>구장</th><th>O/U 신호</th></tr></thead>
+        <thead><tr><th>경기</th><th>홈 선발</th><th>홈 ERA</th><th>원정 선발</th><th>원정 ERA</th><th>예상합산</th><th>구장</th><th>O/U 시그널</th></tr></thead>
         <tbody id="game-analysis-table"></tbody>
       </table>
     </div>
@@ -519,14 +561,28 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 
 </div><!-- /app -->
 
-<!-- 예산 모달 (간단) -->
-<div id="budget-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center">
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:24px;width:min(420px,95vw)">
-    <div style="font-size:15px;font-weight:700;margin-bottom:16px">예산 설정</div>
-    <div style="margin-bottom:12px"><label>월 배팅 한도 (원)</label><input type="number" id="m-budget" value="100000" step="10000"></div>
-    <div style="margin-bottom:16px"><label>총 배팅 자금 (켈리 기준)</label><input type="number" id="m-bankroll" value="500000" step="50000"></div>
+<!-- 목표 설정 모달 -->
+<div class="modal-bg" id="modal-goal">
+  <div class="modal">
+    <div class="modal-title">이번 달 목표 설정</div>
+    <div style="margin-bottom:12px"><label>월 수익 목표 (원)</label><input type="number" id="m-goal-profit" value="50000" step="10000"></div>
+    <div style="margin-bottom:12px"><label>목표 적중률 (%)</label><input type="number" id="m-goal-hit" value="57" step="1" min="50" max="80"></div>
+    <div style="margin-bottom:16px"><label>월 배팅 한도 (원)</label><input type="number" id="m-budget" value="100000" step="10000"></div>
     <div style="display:flex;gap:8px;justify-content:flex-end">
-      <button class="btn btn-ghost" onclick="closeBudget()">취소</button>
+      <button class="btn btn-ghost" onclick="closeModal('goal')">취소</button>
+      <button class="btn btn-blue" onclick="saveGoal()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 예산 설정 모달 -->
+<div class="modal-bg" id="modal-budget">
+  <div class="modal">
+    <div class="modal-title">예산 · 자금 설정</div>
+    <div style="margin-bottom:12px"><label>월 배팅 한도 (원)</label><input type="number" id="m-bud2" value="100000" step="10000"></div>
+    <div style="margin-bottom:16px"><label>총 배팅 자금 (켈리 기준, 원)</label><input type="number" id="m-bankroll" value="500000" step="50000"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('budget')">취소</button>
       <button class="btn btn-blue" onclick="saveBudget()">저장</button>
     </div>
   </div>
@@ -534,209 +590,345 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-// ─────────────────────────────────────────
-// 데이터
-// ─────────────────────────────────────────
-const LS = { get:(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}}, set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}} };
-let records = LS.get('kbo_recs',[]);
-let cfg = LS.get('kbo_cfg',{budget:100000,bankroll:500000});
+// ───────────────────────────────────────
+// 저장소
+// ───────────────────────────────────────
+const LS = {
+  get:(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}},
+  set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+};
+let records = LS.get('kbo_v2_recs',[]);
+let cfg = LS.get('kbo_v2_cfg',{budget:100000,bankroll:500000,goalProfit:50000,goalHit:57});
+let virtualMode = LS.get('kbo_v2_virtual',false);
+let pitcherData = LS.get('kbo_v2_pitchers',{});
 let picks = {};
 const CHARTS = {};
 function DC(id){if(CHARTS[id]){CHARTS[id].destroy();delete CHARTS[id];}}
 
-// 오늘 KBO 경기 (4월 1일 실제 데이터)
+// ───────────────────────────────────────
+// 오늘 경기 데이터
+// ───────────────────────────────────────
 const TODAY_GAMES = [
-  {id:0, home:'KIA 타이거즈', away:'LG 트윈스', hAbb:'KIA', aAbb:'LG',
-   venue:'잠실', time:'18:30', status:'scheduled',
-   hEra:3.21, aEra:3.45, hOps:.748, aOps:.762,
-   hScore:null, aScore:null, inning:'경기 전',
-   hStreak:'오버 2연속', aStreak:'언더 1연속',
-   h2h5y:{over:52, under:48}, hOvr5y:52, aOvr5y:50,
-   memo:'LG 톨허스트 vs KIA 올러 선발 예정'},
-  {id:1, home:'키움 히어로즈', away:'SSG 랜더스', hAbb:'KWM', aAbb:'SSG',
-   venue:'문학', time:'18:30', status:'scheduled',
-   hEra:4.10, aEra:3.88, hOps:.721, aOps:.744,
-   hScore:null, aScore:null, inning:'경기 전',
-   hStreak:'중립', aStreak:'오버 1연속',
-   h2h5y:{over:49, under:51}, hOvr5y:49, aOvr5y:55,
-   memo:'개막 초 두 팀 모두 불펜 안정화 중'},
-  {id:2, home:'두산 베어스', away:'삼성 라이온즈', hAbb:'OB', aAbb:'SAM',
-   venue:'대구', time:'18:30', status:'scheduled',
-   hEra:3.75, aEra:4.22, hOps:.758, aOps:.712,
-   hScore:null, aScore:null, inning:'경기 전',
-   hStreak:'오버 1연속', aStreak:'중립',
-   h2h5y:{over:51, under:49}, hOvr5y:47, aOvr5y:44,
-   memo:'두산 대구 원정 최근 5경기 오버 3회'},
-  {id:3, home:'롯데 자이언츠', away:'NC 다이노스', hAbb:'LOT', aAbb:'NC',
-   venue:'창원', time:'18:30', status:'scheduled',
-   hEra:4.55, aEra:3.62, hOps:.699, aOps:.738,
-   hScore:null, aScore:null, inning:'경기 전',
-   hStreak:'언더 2연속', aStreak:'오버 3연속',
-   h2h5y:{over:46, under:54}, hOvr5y:46, aOvr5y:48,
-   memo:'NC 3연속 오버 이후 패턴 주목'},
-  {id:4, home:'KT 위즈', away:'한화 이글스', hAbb:'KT', aAbb:'HAN',
-   venue:'대전', time:'18:30', status:'scheduled',
-   hEra:3.95, aEra:5.12, hOps:.732, aOps:.688,
-   hScore:null, aScore:null, inning:'경기 전',
-   hStreak:'중립', aStreak:'오버 2연속',
-   h2h5y:{over:48, under:52}, hOvr5y:48, aOvr5y:43,
-   memo:'한화 ERA 5점대 불안정 — 오버 가능성'},
+  {id:0,home:'KIA 타이거즈',away:'LG 트윈스',hAbb:'KIA',aAbb:'LG',venue:'잠실',
+   hEra:3.21,aEra:3.45,hOps:.748,aOps:.762,hOvr5y:52,aOvr5y:50,
+   hStreak:'오버 2연속',aStreak:'언더 1연속',h2hOvr:52,
+   hPitcher:'올러',aPitcher:'톨허스트',memo:'에이스급 맞대결 예상'},
+  {id:1,home:'키움 히어로즈',away:'SSG 랜더스',hAbb:'KWM',aAbb:'SSG',venue:'문학',
+   hEra:4.10,aEra:3.88,hOps:.721,aOps:.744,hOvr5y:49,aOvr5y:55,
+   hStreak:'중립',aStreak:'오버 1연속',h2hOvr:49,
+   hPitcher:'미정',aPitcher:'미정',memo:'선발 미발표, 불펜 안정화 중'},
+  {id:2,home:'두산 베어스',away:'삼성 라이온즈',hAbb:'OB',aAbb:'SAM',venue:'대구',
+   hEra:3.75,aEra:4.22,hOps:.758,aOps:.712,hOvr5y:47,aOvr5y:44,
+   hStreak:'오버 1연속',aStreak:'중립',h2hOvr:51,
+   hPitcher:'미정',aPitcher:'미정',memo:'두산 대구 원정 최근 오버 3회'},
+  {id:3,home:'롯데 자이언츠',away:'NC 다이노스',hAbb:'LOT',aAbb:'NC',venue:'창원',
+   hEra:4.55,aEra:3.62,hOps:.699,aOps:.738,hOvr5y:46,aOvr5y:48,
+   hStreak:'언더 2연속',aStreak:'오버 3연속',h2hOvr:46,
+   hPitcher:'미정',aPitcher:'미정',memo:'NC 3연속 오버 → 언더 전환 패턴'},
+  {id:4,home:'KT 위즈',away:'한화 이글스',hAbb:'KT',aAbb:'HAN',venue:'대전',
+   hEra:3.95,aEra:5.12,hOps:.732,aOps:.688,hOvr5y:48,aOvr5y:43,
+   hStreak:'중립',aStreak:'오버 2연속',h2hOvr:48,
+   hPitcher:'미정',aPitcher:'미정',memo:'한화 ERA 5점대 — 오버 가능성'}
 ];
 
-// KBO 팀 통계 (2026 시즌 초반 + 5년 평균)
 const TEAM_DATA = {
-  'KIA': {name:'KIA 타이거즈', rank:1, w:3, l:1, era:3.21, ops:.748, ovr5y:52, color:'#e04040'},
-  'LG':  {name:'LG 트윈스',    rank:2, w:3, l:1, era:3.45, ops:.762, ovr5y:50, color:'#c8001e'},
-  'SSG': {name:'SSG 랜더스',   rank:3, w:2, l:2, era:3.88, ops:.744, ovr5y:55, color:'#ce0e2d'},
-  'OB':  {name:'두산 베어스',  rank:4, w:2, l:2, era:3.75, ops:.758, ovr5y:47, color:'#131230'},
-  'SAM': {name:'삼성 라이온즈',rank:5, w:2, l:2, era:4.22, ops:.712, ovr5y:44, color:'#074ca1'},
-  'KT':  {name:'KT 위즈',      rank:6, w:1, l:3, era:3.95, ops:.732, ovr5y:48, color:'#231f20'},
-  'NC':  {name:'NC 다이노스',  rank:7, w:2, l:2, era:3.62, ops:.738, ovr5y:48, color:'#071d36'},
-  'LOT': {name:'롯데 자이언츠',rank:8, w:1, l:3, era:4.55, ops:.699, ovr5y:46, color:'#d00000'},
-  'KWM': {name:'키움 히어로즈',rank:9, w:1, l:3, era:4.10, ops:.721, ovr5y:49, color:'#820024'},
-  'HAN': {name:'한화 이글스',  rank:10,w:1, l:3, era:5.12, ops:.688, ovr5y:43, color:'#ff6600'},
+  'KIA':{name:'KIA 타이거즈',rank:1,w:3,l:1,era:3.21,ops:.748,ovr5y:52,color:'#e04040'},
+  'LG': {name:'LG 트윈스',  rank:2,w:3,l:1,era:3.45,ops:.762,ovr5y:50,color:'#c8001e'},
+  'SSG':{name:'SSG 랜더스', rank:3,w:2,l:2,era:3.88,ops:.744,ovr5y:55,color:'#ce0e2d'},
+  'OB': {name:'두산 베어스', rank:4,w:2,l:2,era:3.75,ops:.758,ovr5y:47,color:'#131230'},
+  'SAM':{name:'삼성 라이온즈',rank:5,w:2,l:2,era:4.22,ops:.712,ovr5y:44,color:'#074ca1'},
+  'KT': {name:'KT 위즈',    rank:6,w:1,l:3,era:3.95,ops:.732,ovr5y:48,color:'#231f20'},
+  'NC': {name:'NC 다이노스', rank:7,w:2,l:2,era:3.62,ops:.738,ovr5y:48,color:'#071d36'},
+  'LOT':{name:'롯데 자이언츠',rank:8,w:1,l:3,era:4.55,ops:.699,ovr5y:46,color:'#d00000'},
+  'KWM':{name:'키움 히어로즈',rank:9,w:1,l:3,era:4.10,ops:.721,ovr5y:49,color:'#820024'},
+  'HAN':{name:'한화 이글스', rank:10,w:1,l:3,era:5.12,ops:.688,ovr5y:43,color:'#ff6600'},
 };
 
-// ─────────────────────────────────────────
+// ───────────────────────────────────────
 // 유틸
-// ─────────────────────────────────────────
-const fmt = n => Math.abs(n).toLocaleString('ko-KR');
-const fmtW = n => (n>=0?'+':'-')+fmt(n)+'원';
-const fmtPct = n => (n>=0?'+':'')+parseFloat(n).toFixed(1)+'%';
-const today = () => new Date().toISOString().split('T')[0];
-const monthKey = d => d.slice(0,7);
-const nowMonth = () => today().slice(0,7);
-const DOW = d => ['일','월','화','수','목','금','토'][new Date(d).getDay()];
-const pnl = r => r.result==='win'?Math.round(r.amount*(r.odds-1)):r.result==='lose'?-r.amount:0;
-const getLine = () => parseFloat(document.getElementById('line-sel').value)||7.5;
+// ───────────────────────────────────────
+const fmt=n=>Math.abs(n).toLocaleString('ko-KR');
+const fmtW=n=>(n>=0?'+':'-')+fmt(n)+'원';
+const today_=()=>new Date().toISOString().split('T')[0];
+const nowMonth=()=>today_().slice(0,7);
+const DOW=d=>['일','월','화','수','목','금','토'][new Date(d).getDay()];
+const pnl=r=>r.result==='win'?Math.round(r.amount*(r.odds-1)):r.result==='lose'?-r.amount:0;
+const getLine=()=>parseFloat(document.getElementById('line-sel').value)||7.5;
+
+function getGameEra(g){
+  const pd = pitcherData[g.id] || {};
+  return {
+    hEra: pd.hEra || g.hEra,
+    aEra: pd.aEra || g.aEra,
+    hPitcher: pd.hPitcher || g.hPitcher,
+    aPitcher: pd.aPitcher || g.aPitcher,
+  };
+}
 
 function calcOdds(g, line){
-  const exp = (g.hEra + g.aEra) > 8 ? 9.2 : (g.hEra + g.aEra) < 7 ? 7.8 : 8.2;
-  const gap = exp - line;
-  const oPct = Math.max(28, Math.min(72, Math.round(50 + gap * 5 + ((g.hOvr5y+g.aOvr5y)/2-50)*0.3)));
+  const {hEra, aEra} = getGameEra(g);
+  const sumEra = hEra + aEra;
+  const expTotal = sumEra < 6.5 ? 7.4 : sumEra < 7.5 ? 7.9 : sumEra < 8.5 ? 8.5 : 9.2;
+  const gap = expTotal - line;
+  const avgOvr = (g.hOvr5y + g.aOvr5y) / 2;
+  let oPct = Math.max(25, Math.min(75, Math.round(50 + gap*5 + (avgOvr-50)*0.3)));
   const uPct = 100 - oPct;
   return {
-    uOdds: (1/(uPct/100)*0.91).toFixed(2),
-    oOdds: (1/(oPct/100)*0.91).toFixed(2),
-    uPct, oPct, expTotal: exp.toFixed(1)
+    uOdds:(1/(uPct/100)*0.91).toFixed(2),
+    oOdds:(1/(oPct/100)*0.91).toFixed(2),
+    uPct, oPct, expTotal:expTotal.toFixed(1)
   };
 }
 
 function sigInfo(g, line){
-  const {oPct, uPct, expTotal} = calcOdds(g, line);
-  const hEra = g.hEra, aEra = g.aEra;
+  const {hEra, aEra} = getGameEra(g);
   let score = 0;
-  if(hEra<3.5&&aEra<3.5) score-=2.5; else if(hEra<4||aEra<4) score-=1;
-  if(hEra>4.5&&aEra>4.5) score+=2.5; else if(hEra>4.5||aEra>4.5) score+=1.2;
-  if(g.hStreak.includes('오버 3')) score+=1.5; else if(g.hStreak.includes('언더 2')||g.hStreak.includes('언더 3')) score-=1;
-  if(g.aStreak.includes('오버 3')) score+=1.5; else if(g.aStreak.includes('언더 2')||g.aStreak.includes('언더 3')) score-=1;
-  const avgOvr = (g.hOvr5y+g.aOvr5y)/2;
+  if(hEra<3.5&&aEra<3.5) score-=2.5; else if(hEra<4||aEra<4) score-=1.2;
+  if(hEra>4.5&&aEra>4.5) score+=2.5; else if(hEra>4.5||aEra>4.5) score+=1.3;
+  if(g.hStreak.includes('오버 3')) score+=1.5; else if(g.aStreak.includes('오버 3')) score+=1.5;
+  if(g.hStreak.includes('언더 2')||g.hStreak.includes('언더 3')) score-=1;
+  if(g.aStreak.includes('언더 2')||g.aStreak.includes('언더 3')) score-=1;
+  const avgOvr=(g.hOvr5y+g.aOvr5y)/2;
   if(avgOvr>52) score+=0.8; else if(avgOvr<47) score-=0.8;
-  if(score<=-2){return {label:'강한 언더',cls:'b-strong-u',color:'var(--blue)',dot:'#4d9fff',rec:'UNDER'};}
-  if(score<=-0.8){return {label:'언더',cls:'b-under',color:'var(--blue)',dot:'#2d7fff',rec:'UNDER'};}
-  if(score<=0.8){return {label:'중립',cls:'b-neutral',color:'var(--text3)',dot:'#5a6480',rec:'PASS'};}
-  if(score<=2){return {label:'오버',cls:'b-over',color:'var(--red)',dot:'#ff5f5f',rec:'OVER'};}
-  return {label:'강한 오버',cls:'b-strong-o',color:'var(--red)',dot:'#ff3333',rec:'OVER'};
+  if(score<=-2) return {label:'강한 언더',cls:'b-strong-u',rec:'UNDER',conf:72};
+  if(score<=-0.8) return {label:'언더',cls:'b-under',rec:'UNDER',conf:62};
+  if(score<=0.8) return {label:'중립',cls:'b-neutral',rec:'PASS',conf:50};
+  if(score<=2) return {label:'오버',cls:'b-over',rec:'OVER',conf:62};
+  return {label:'강한 오버',cls:'b-strong-o',rec:'OVER',conf:72};
 }
 
-// ─────────────────────────────────────────
-// 탭 전환
-// ─────────────────────────────────────────
-function showTab(n, btn){
+// ───────────────────────────────────────
+// 시계
+// ───────────────────────────────────────
+function updateClock(){
+  const n=new Date();
+  document.getElementById('clock').textContent=
+    `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
+}
+setInterval(updateClock,1000); updateClock();
+
+// ───────────────────────────────────────
+// 알림
+// ───────────────────────────────────────
+function showAlert(msg, type='info'){
+  const el=document.getElementById('alert-popup');
+  const colors={info:'var(--blue)',success:'var(--green)',warn:'var(--amber)',danger:'var(--red)'};
+  el.style.borderColor=colors[type]||colors.info;
+  el.style.color=colors[type]||colors.info;
+  el.textContent=msg;
+  el.style.display='block';
+  setTimeout(()=>el.style.display='none',3000);
+}
+
+// ───────────────────────────────────────
+// 탭
+// ───────────────────────────────────────
+function showTab(n,btn){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
   btn.classList.add('on');
   document.getElementById('sec-'+n).classList.add('on');
   if(n==='today') renderGames();
   if(n==='auto') populateAutoMatches();
-  if(n==='kelly'){ calcKelly(); renderBETable(); }
-  if(n==='record'){ renderRecSummary(); renderRecs(); }
+  if(n==='kelly'){calcKelly();renderBETable();}
+  if(n==='record'){renderRecSummary();renderRecs();}
+  if(n==='verify') renderVerify();
   if(n==='stats') renderStats();
   if(n==='standing') renderStanding();
 }
 
-// ─────────────────────────────────────────
-// 시계
-// ─────────────────────────────────────────
-function updateClock(){
-  const now = new Date();
-  const h=String(now.getHours()).padStart(2,'0');
-  const m=String(now.getMinutes()).padStart(2,'0');
-  const s=String(now.getSeconds()).padStart(2,'0');
-  document.getElementById('clock-display').textContent=`${h}:${m}:${s}`;
+// ───────────────────────────────────────
+// 모달
+// ───────────────────────────────────────
+function openModal(type){
+  if(type==='goal'){
+    document.getElementById('m-goal-profit').value=cfg.goalProfit;
+    document.getElementById('m-goal-hit').value=cfg.goalHit;
+    document.getElementById('m-budget').value=cfg.budget;
+  } else {
+    document.getElementById('m-bud2').value=cfg.budget;
+    document.getElementById('m-bankroll').value=cfg.bankroll;
+  }
+  document.getElementById('modal-'+type).classList.add('open');
 }
-setInterval(updateClock,1000); updateClock();
-
-// ─────────────────────────────────────────
-// 예산
-// ─────────────────────────────────────────
-function openBudget(){document.getElementById('budget-modal').style.display='flex';document.getElementById('m-budget').value=cfg.budget;document.getElementById('m-bankroll').value=cfg.bankroll;}
-function closeBudget(){document.getElementById('budget-modal').style.display='none';}
-function saveBudget(){cfg.budget=parseInt(document.getElementById('m-budget').value)||100000;cfg.bankroll=parseInt(document.getElementById('m-bankroll').value)||500000;LS.set('kbo_cfg',cfg);closeBudget();renderBudget();}
-
-function renderBudget(){
-  const m = nowMonth();
-  const mr = records.filter(r=>r.date&&r.date.startsWith(m));
-  const used = mr.reduce((s,r)=>s+r.amount,0);
-  const rPnl = mr.filter(r=>r.result!=='pending').reduce((s,r)=>s+pnl(r),0);
-  const remain = Math.max(0,cfg.budget-used);
-  const pct = Math.min(100,Math.round(used/cfg.budget*100));
-  const now = new Date();
-  document.getElementById('bud-month').textContent=`${now.getFullYear()}년 ${now.getMonth()+1}월`;
-  document.getElementById('bud-limit').textContent=fmt(cfg.budget)+'원';
-  document.getElementById('bud-used').textContent=fmt(used)+'원';
-  document.getElementById('bud-remain').textContent=fmt(remain)+'원';
-  document.getElementById('bud-pnl').textContent=fmtW(rPnl);
-  document.getElementById('bud-pnl').style.color=rPnl>=0?'var(--green)':'var(--red)';
-  const bar=document.getElementById('bud-fill');
-  bar.style.width=pct+'%';
-  bar.style.background=pct>=90?'var(--red)':pct>=70?'var(--amber)':'var(--blue)';
-  document.getElementById('bud-pct').textContent=`사용 ${pct}%`;
+function closeModal(type){document.getElementById('modal-'+type).classList.remove('open');}
+function saveGoal(){
+  cfg.goalProfit=parseInt(document.getElementById('m-goal-profit').value)||50000;
+  cfg.goalHit=parseInt(document.getElementById('m-goal-hit').value)||57;
+  cfg.budget=parseInt(document.getElementById('m-budget').value)||100000;
+  LS.set('kbo_v2_cfg',cfg);
+  closeModal('goal');
+  renderGoalBars();
+  showAlert('목표가 저장되었습니다.','success');
+}
+function saveBudget(){
+  cfg.budget=parseInt(document.getElementById('m-bud2').value)||100000;
+  cfg.bankroll=parseInt(document.getElementById('m-bankroll').value)||500000;
+  LS.set('kbo_v2_cfg',cfg);
+  document.getElementById('k-bank').value=cfg.bankroll;
+  closeModal('budget');
+  renderGoalBars();
+  calcKelly();
+  showAlert('설정이 저장되었습니다.','success');
 }
 
-// ─────────────────────────────────────────
+// ───────────────────────────────────────
+// 목표 진행바
+// ───────────────────────────────────────
+function renderGoalBars(){
+  const m=nowMonth();
+  const mr=records.filter(r=>r.date?.startsWith(m)&&r.mode!=='virtual');
+  const settled=mr.filter(r=>r.result!=='pending');
+  const wins=settled.filter(r=>r.result==='win');
+  const totalPnl=settled.reduce((s,r)=>s+pnl(r),0);
+  const hitRate=settled.length?Math.round(wins.length/settled.length*100):0;
+  const used=mr.reduce((s,r)=>s+r.amount,0);
+
+  const profitPct=Math.min(100,Math.max(0,totalPnl>0?Math.round(totalPnl/cfg.goalProfit*100):0));
+  const hitPct=Math.min(100,Math.round(hitRate/cfg.goalHit*100));
+  const budPct=Math.min(100,Math.round(used/cfg.budget*100));
+
+  document.getElementById('goal-profit-bar').style.width=profitPct+'%';
+  document.getElementById('goal-profit-val').textContent=`${fmtW(totalPnl)} / ${fmt(cfg.goalProfit)}원`;
+  document.getElementById('goal-profit-val').style.color=totalPnl>=0?'var(--green)':'var(--red)';
+  document.getElementById('goal-hit-bar').style.width=hitPct+'%';
+  document.getElementById('goal-hit-val').textContent=`${hitRate}% / ${cfg.goalHit}%`;
+  document.getElementById('goal-hit-val').style.color=hitRate>=cfg.goalHit?'var(--green)':hitRate>=cfg.goalHit*0.9?'var(--amber)':'var(--text3)';
+  document.getElementById('bud-fill').style.width=budPct+'%';
+  document.getElementById('bud-fill').style.background=budPct>=90?'var(--red)':budPct>=70?'var(--amber)':'var(--blue)';
+  document.getElementById('bud-pct-val').textContent=`${fmt(used)}원 / ${fmt(cfg.budget)}원`;
+
+  const now=new Date();
+  document.getElementById('goal-month-label').textContent=`${now.getFullYear()}년 ${now.getMonth()+1}월`;
+
+  // 한도 경고
+  if(budPct>=90) showAlert('⚠ 이번 달 배팅 예산의 90%를 사용했습니다!','danger');
+}
+
+// ───────────────────────────────────────
+// 가상모드
+// ───────────────────────────────────────
+function toggleVirtualMode(){
+  virtualMode=!virtualMode;
+  LS.set('kbo_v2_virtual',virtualMode);
+  updateVirtualUI();
+  showAlert(virtualMode?'가상 배팅 모드 ON — 실제 돈이 사용되지 않습니다':'실제 배팅 모드로 전환되었습니다', virtualMode?'info':'warn');
+}
+
+function updateVirtualUI(){
+  const banner=document.getElementById('virtual-banner');
+  const btn=document.getElementById('mode-btn-txt');
+  banner.style.display=virtualMode?'flex':'none';
+  btn.textContent=virtualMode?'가상모드 OFF':'가상모드 ON';
+
+  if(virtualMode){
+    // 가상 통계 업데이트
+    const vr=records.filter(r=>r.mode==='virtual');
+    const vs=vr.filter(r=>r.result!=='pending');
+    const vw=vs.filter(r=>r.result==='win');
+    const hr=vs.length?Math.round(vw.length/vs.length*100):0;
+    const vpnl=vs.reduce((s,r)=>s+pnl(r),0);
+    document.getElementById('virtual-stats').textContent=
+      `가상 적중률: ${hr}% (${vw.length}/${vs.length}) | 가상 손익: ${fmtW(vpnl)}`;
+  }
+
+  const badge=document.getElementById('pick-mode-badge');
+  if(badge) badge.innerHTML=virtualMode?'<span class="badge b-virtual">VIRTUAL</span>':'<span class="badge b-real">REAL</span>';
+  const recLabel=document.getElementById('rec-mode-label');
+  if(recLabel) recLabel.innerHTML=virtualMode?'<span class="badge b-virtual">현재 가상모드</span>':'<span class="badge b-real">현재 실제모드</span>';
+}
+
+// ───────────────────────────────────────
+// 선발 투수 입력
+// ───────────────────────────────────────
+function renderPitcherInputs(){
+  const el=document.getElementById('pitcher-inputs');
+  el.innerHTML=TODAY_GAMES.map(g=>{
+    const pd=pitcherData[g.id]||{};
+    return`<div style="margin-bottom:10px;padding:10px 12px;background:var(--bg3);border-radius:var(--r);border:1px solid var(--border)">
+      <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px;font-family:var(--mono)">${g.home} vs ${g.away} (${g.venue})</div>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-items:end">
+        <div>
+          <label>홈 선발</label>
+          <input type="text" id="ph-${g.id}" value="${pd.hPitcher||g.hPitcher}" placeholder="${g.hPitcher}" style="font-size:12px">
+        </div>
+        <div>
+          <label>홈 ERA</label>
+          <input type="number" id="pe-h-${g.id}" value="${pd.hEra||g.hEra}" step="0.01" min="0" style="font-size:12px">
+        </div>
+        <div>
+          <label>원정 선발</label>
+          <input type="text" id="pa-${g.id}" value="${pd.aPitcher||g.aPitcher}" placeholder="${g.aPitcher}" style="font-size:12px">
+        </div>
+        <div>
+          <label>원정 ERA</label>
+          <input type="number" id="pe-a-${g.id}" value="${pd.aEra||g.aEra}" step="0.01" min="0" style="font-size:12px">
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function applyPitchers(){
+  TODAY_GAMES.forEach(g=>{
+    pitcherData[g.id]={
+      hPitcher:document.getElementById(`ph-${g.id}`)?.value||g.hPitcher,
+      hEra:parseFloat(document.getElementById(`pe-h-${g.id}`)?.value)||g.hEra,
+      aPitcher:document.getElementById(`pa-${g.id}`)?.value||g.aPitcher,
+      aEra:parseFloat(document.getElementById(`pe-a-${g.id}`)?.value)||g.aEra,
+    };
+  });
+  LS.set('kbo_v2_pitchers',pitcherData);
+  renderGames();
+  showAlert('✓ 선발 투수 적용 완료 — 분석이 업데이트되었습니다','success');
+}
+
+// ───────────────────────────────────────
 // 오늘 경기 렌더링
-// ─────────────────────────────────────────
+// ───────────────────────────────────────
 function renderGames(){
-  const line = getLine();
-  let underRec=0,overRec=0,pass=0;
-  TODAY_GAMES.forEach(g=>{const s=sigInfo(g,line);if(s.rec==='UNDER')underRec++;else if(s.rec==='OVER')overRec++;else pass++;});
+  const line=getLine();
+  let uRec=0,oRec=0,pass=0;
+  TODAY_GAMES.forEach(g=>{const s=sigInfo(g,line);if(s.rec==='UNDER')uRec++;else if(s.rec==='OVER')oRec++;else pass++;});
   document.getElementById('today-summary').innerHTML=`
-    <div class="mc"><div class="lbl">오늘 경기</div><div class="val bl">5</div><div class="sub">전경기 18:30</div></div>
-    <div class="mc"><div class="lbl">기준선</div><div class="val am">${line}점</div><div class="sub">합산 기준</div></div>
-    <div class="mc"><div class="lbl">언더 추천</div><div class="val bl">${underRec}경기</div><div class="sub">AI 시그널</div></div>
-    <div class="mc"><div class="lbl">오버 추천</div><div class="val dn">${overRec}경기</div><div class="sub">AI 시그널</div></div>
-    <div class="mc"><div class="lbl">중립 (패스)</div><div class="val">${pass}경기</div><div class="sub">배팅 자제</div></div>`;
+    <div class="mc bl"><div class="lbl">오늘 경기</div><div class="val">5</div><div class="sub">전경기 18:30</div></div>
+    <div class="mc am"><div class="lbl">기준선</div><div class="val">${line}점</div></div>
+    <div class="mc bl"><div class="lbl">언더 추천</div><div class="val">${uRec}</div><div class="sub">AI 시그널</div></div>
+    <div class="mc dn"><div class="lbl">오버 추천</div><div class="val">${oRec}</div></div>
+    <div class="mc"><div class="lbl">중립/패스</div><div class="val">${pass}</div></div>`;
+
+  updateVirtualUI();
 
   let html='';
   TODAY_GAMES.forEach(g=>{
     const {uOdds,oOdds,uPct,oPct,expTotal}=calcOdds(g,line);
     const sig=sigInfo(g,line);
+    const {hPitcher,aPitcher,hEra,aEra}=getGameEra(g);
     const pk=picks[g.id];
-    html+=`<div class="game-card ${pk==='under'?'picked-u':pk==='over'?'picked-o':''}" id="gc-${g.id}">
+    html+=`<div class="game-card ${pk==='under'?'picked-u':pk==='over'?'picked-o':''}" style="${pk==='under'?'border:1px solid var(--blue);background:#0d1a2e':''}${pk==='over'?'border:1px solid var(--red);background:#1a0d0d':''}">
       <div class="gc-header">
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <span class="badge b-sched">예정</span>
-          <span style="font-size:11px;color:var(--text3);font-family:var(--mono)">${g.venue} · ${g.time}</span>
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+          <span style="font-size:10px;color:var(--text3);font-family:var(--mono)">${g.venue} · 18:30</span>
           <span class="badge ${sig.cls}">${sig.label}</span>
+          <span style="font-size:10px;color:var(--text3);font-family:var(--mono)">신뢰도 ${sig.conf}%</span>
         </div>
-        <div style="display:flex;align-items:center;gap:6px">
-          <span style="font-size:10px;color:var(--text3);font-family:var(--mono)">예상 ${expTotal}점 / 기준 ${line}점</span>
-        </div>
+        <span style="font-size:10px;color:var(--amber);font-family:var(--mono)">예상 ${expTotal}점 / 기준 ${line}점</span>
       </div>
       <div class="gc-body">
         <div>
           <div class="gc-team" style="color:${TEAM_DATA[g.hAbb]?.color||'var(--text)'}">${g.home}</div>
-          <div class="gc-stat">ERA ${g.hEra} · OPS ${g.hOps} · 5년오버 ${g.hOvr5y}%</div>
+          <div class="gc-stat">선발: ${hPitcher} (ERA ${hEra})</div>
+          <div class="gc-stat">OPS ${g.hOps} · 5년오버 ${g.hOvr5y}%</div>
           <div class="gc-stat" style="color:var(--amber)">${g.hStreak}</div>
         </div>
-        <div class="gc-vs">
-          <div class="gc-score" style="color:var(--text3)">VS</div>
-          <div class="gc-info">${line}점 기준</div>
+        <div style="text-align:center">
+          <div class="gc-score">VS</div>
+          <div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px">${line}점 기준</div>
         </div>
         <div style="text-align:right">
           <div class="gc-team" style="color:${TEAM_DATA[g.aAbb]?.color||'var(--text)'}">${g.away}</div>
-          <div class="gc-stat" style="text-align:right">ERA ${g.aEra} · OPS ${g.aOps} · 5년오버 ${g.aOvr5y}%</div>
+          <div class="gc-stat" style="text-align:right">선발: ${aPitcher} (ERA ${aEra})</div>
+          <div class="gc-stat" style="text-align:right">OPS ${g.aOps} · 5년오버 ${g.aOvr5y}%</div>
           <div class="gc-stat" style="text-align:right;color:var(--amber)">${g.aStreak}</div>
         </div>
       </div>
@@ -756,6 +948,7 @@ function renderGames(){
           <div class="bet-pct">확률 약 ${oPct}%</div>
         </div>
       </div>
+      ${virtualMode?`<div style="margin-top:8px;text-align:center"><button class="btn btn-purple" style="font-size:11px;padding:5px 12px" onclick="quickVirtualBet(${g.id},'${sig.rec}',${sig.rec==='UNDER'?uOdds:oOdds},${sig.conf})">가상 배팅 빠른 등록 (${sig.rec==='PASS'?'중립':sig.rec==='UNDER'?'언더':'오버'})</button></div>`:''}
       <div style="font-size:10px;color:var(--text3);margin-top:8px;font-family:var(--mono)">${g.memo}</div>
     </div>`;
   });
@@ -763,144 +956,124 @@ function renderGames(){
   renderPickSummary();
 }
 
-function addPick(id, type, odds){
+function addPick(id,type,odds){
   if(picks[id]===type) delete picks[id]; else picks[id]={type,odds:parseFloat(odds)};
   renderGames();
 }
 
 function renderPickSummary(){
   const keys=Object.keys(picks);
-  if(!keys.length){document.getElementById('pick-summary').innerHTML='<span style="color:var(--text3);font-size:12px">경기 카드에서 언더/오버를 선택하세요.</span>';return;}
+  const el=document.getElementById('pick-summary');
+  if(!keys.length){el.innerHTML='<span style="color:var(--text3);font-size:12px">경기 카드에서 언더/오버를 선택하세요.</span>';return;}
   const line=getLine();
   const combined=keys.reduce((a,k)=>a*picks[k].odds,1);
   let html=`<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px">`;
-  keys.forEach(k=>{const g=TODAY_GAMES[k];const p=picks[k];html+=`<div style="background:${p.type==='under'?'var(--blue-dim)':'var(--red-dim)'};border:1px solid ${p.type==='under'?'var(--blue2)':'var(--red)'};border-radius:var(--r);padding:6px 12px;font-size:12px;font-family:var(--mono);color:${p.type==='under'?'var(--blue)':'var(--red)'}"><strong>${g.home} vs ${g.away}</strong> · ${p.type==='under'?'언더':'오버'} ${line} · 배당 ${p.odds}</div>`;});
-  html+=`</div><div style="font-size:11px;color:var(--text3);font-family:var(--mono)">파레이 합산 배당: <strong style="color:var(--amber)">${combined.toFixed(2)}</strong> · ${keys.length}경기 선택</div>`;
-  document.getElementById('pick-summary').innerHTML=html;
+  keys.forEach(k=>{const g=TODAY_GAMES[k];const p=picks[k];
+    html+=`<div style="background:${p.type==='under'?'var(--blue-dim)':'var(--red-dim)'};border:1px solid ${p.type==='under'?'var(--blue2)':'var(--red)'};border-radius:var(--r);padding:6px 12px;font-size:12px;font-family:var(--mono);color:${p.type==='under'?'var(--blue)':'var(--red)'}"><strong>${g.home} vs ${g.away}</strong> · ${p.type==='under'?'언더':'오버'} ${line} · <strong>${p.odds}</strong></div>`;
+  });
+  html+=`</div>
+  <div style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:8px">파레이 합산 배당: <strong style="color:var(--amber)">${combined.toFixed(2)}</strong> · ${keys.length}경기</div>
+  ${virtualMode?`<button class="btn btn-purple" onclick="bulkVirtualBet()" style="font-size:12px">선택 픽 전체 가상 배팅 등록</button>`:''}`;
+  el.innerHTML=html;
 }
 
-// ─────────────────────────────────────────
-// 자동 AI 예측
-// ─────────────────────────────────────────
+// ───────────────────────────────────────
+// 빠른 가상 배팅
+// ───────────────────────────────────────
+function quickVirtualBet(gameId, rec, odds, conf){
+  if(rec==='PASS'){showAlert('중립 경기는 가상 배팅을 권장하지 않습니다','warn');return;}
+  const g=TODAY_GAMES[gameId];
+  const line=getLine();
+  const type=rec==='UNDER'?'under':'over';
+  const rec2={id:Date.now(),date:today_(),game:`${g.home} vs ${g.away}`,type,line,odds,amount:10000,conf,result:'pending',memo:`AI 자동 가상배팅 (${g.venue})`,mode:'virtual'};
+  records.unshift(rec2);
+  LS.set('kbo_v2_recs',records);
+  renderGoalBars();
+  updateVirtualUI();
+  showAlert(`✓ 가상배팅 등록: ${g.home} vs ${g.away} ${type==='under'?'언더':'오버'} ${line}`,'success');
+}
+
+function bulkVirtualBet(){
+  const keys=Object.keys(picks);
+  const line=getLine();
+  keys.forEach(k=>{
+    const g=TODAY_GAMES[k];
+    const p=picks[k];
+    const sig=sigInfo(g,line);
+    records.unshift({id:Date.now()+parseInt(k),date:today_(),game:`${g.home} vs ${g.away}`,type:p.type,line,odds:p.odds,amount:10000,conf:sig.conf,result:'pending',memo:`픽 가상배팅`,mode:'virtual'});
+  });
+  picks={};
+  LS.set('kbo_v2_recs',records);
+  renderGames();
+  renderGoalBars();
+  updateVirtualUI();
+  showAlert(`✓ ${keys.length}경기 가상 배팅 등록 완료`,'success');
+}
+
+function addVirtualRecord(){
+  const r = buildRecordObj();
+  if(!r) return;
+  r.mode='virtual';
+  records.unshift(r);
+  LS.set('kbo_v2_recs',records);
+  showAlert('✓ 가상 배팅 등록 완료','success');
+  clearRec(); renderRecSummary(); renderRecs(); renderGoalBars(); updateVirtualUI(); populateMonthFilter();
+}
+
+// ───────────────────────────────────────
+// AI 자동 예측
+// ───────────────────────────────────────
 function populateAutoMatches(){
   document.getElementById('auto-match').innerHTML=TODAY_GAMES.map((g,i)=>`<option value="${i}">${g.home} vs ${g.away} (${g.venue})</option>`).join('');
 }
 
 function buildPrompt(g, line, bankroll){
+  const {hPitcher,aPitcher,hEra,aEra}=getGameEra(g);
   const conds=[];
-  if(document.getElementById('chk-era').checked) conds.push(`선발 ERA — 홈:${g.hEra} 원정:${g.aEra} (양팀 합계 ${(g.hEra+g.aEra).toFixed(2)})`);
+  if(document.getElementById('chk-era').checked) conds.push(`선발 투수 — 홈:${hPitcher}(ERA ${hEra}) 원정:${aPitcher}(ERA ${aEra})`);
   if(document.getElementById('chk-ops').checked) conds.push(`팀 OPS — 홈:${g.hOps} 원정:${g.aOps}`);
   if(document.getElementById('chk-streak').checked) conds.push(`최근 이력 — 홈:${g.hStreak} / 원정:${g.aStreak}`);
-  if(document.getElementById('chk-h2h').checked) conds.push(`5년 상대 O/U — 오버 ${g.h2h5y.over}% / 언더 ${g.h2h5y.under}%`);
-  if(document.getElementById('chk-venue').checked) conds.push(`구장: ${g.venue} (${g.venue==='잠실'?'타자유리 구장, 홈런 多':'일반 구장'})`);
-  const kellyLine = document.getElementById('chk-kelly').checked?`\n- 켈리 배팅금: 총 자금 ${fmt(bankroll)}원 기준으로 추천 배팅금도 계산해주세요.`:'';
-  return `당신은 KBO 언더/오버 전문 분석가입니다. 베트맨 기준 분석을 해주세요.
+  if(document.getElementById('chk-h2h').checked) conds.push(`5년 상대 오버율: ${g.h2hOvr}%`);
+  if(document.getElementById('chk-venue').checked) conds.push(`구장: ${g.venue}`);
+  const kellyLine=document.getElementById('chk-kelly').checked?`\n켈리 배팅금: 총 자금 ${fmt(bankroll)}원 기준 추천 배팅금도 계산해주세요.`:'';
 
-[경기] ${g.home} vs ${g.away} (${g.venue}, ${g.time})
-[기준선] ${line}점 (양팀 합산)
-[분석 데이터]
+  return `당신은 KBO 언더/오버 전문 분석가입니다.
+경기: ${g.home} vs ${g.away} (${g.venue}, 18:30)
+베트맨 기준선: ${line}점 (양팀 합산)
+분석 데이터:
 ${conds.map(c=>'- '+c).join('\n')}
-- 메모: ${g.memo}
-${kellyLine}
+- 참고: ${g.memo}${kellyLine}
 
-다음 형식으로 정확히 작성하세요:
+다음 형식으로 분석하세요:
 
 [최종 픽]
 예측: 언더 또는 오버 ${line}점
-예상 합산 득점: X점
-신뢰도: X%
+예상 합산: X점  신뢰도: X%
 
-[근거 3가지]
+[근거]
 1. 
 2. 
 3. 
 
 [리스크]
 - 
-${document.getElementById('chk-kelly').checked?`\n[켈리 배팅 권장금]\n권장: X원 (자금의 X%)\n`:''}
-[결론]
-한 줄 요약
 
-⚠️ 이 분석은 참고용이며 배팅 손실의 책임은 본인에게 있습니다.`;
-}
+[켈리 배팅]
+권장 금액: X원 (자금의 X%)
 
-// ─────────────────────────────────────────
-// API 키 관리
-// ─────────────────────────────────────────
-function getApiKey(){ return LS.get('kbo_api_key',''); }
-function saveApiKey(){
-  const key=document.getElementById('api-key-input').value.trim();
-  if(!key){alert('API 키를 입력해주세요.');return;}
-  if(!key.startsWith('sk-ant-')){alert('올바른 Anthropic API 키 형식이 아닙니다. (sk-ant- 로 시작)');return;}
-  LS.set('kbo_api_key',key);
-  document.getElementById('api-key-input').value='';
-  updateApiKeyStatus();
-  alert('✓ API 키가 저장되었습니다. 이제 AI 분석을 사용할 수 있습니다.');
-}
-function clearApiKey(){
-  if(!confirm('저장된 API 키를 삭제하시겠습니까?'))return;
-  localStorage.removeItem('kbo_api_key');
-  updateApiKeyStatus();
-}
-function updateApiKeyStatus(){
-  const k=getApiKey();
-  const el=document.getElementById('api-key-status');
-  if(k){
-    el.textContent='✓ API 키 설정됨 ('+k.slice(0,12)+'...)';
-    el.style.color='var(--green)';el.style.borderColor='var(--green-dim)';
-    el.style.border='1px solid var(--green-dim)';
-    document.getElementById('api-key-card').style.borderColor='var(--green-dim)';
-  } else {
-    el.textContent='✗ 미설정 — AI 분석 불가';
-    el.style.color='var(--red)';
-    el.style.border='1px solid var(--red-dim)';
-    document.getElementById('api-key-card').style.borderColor='var(--amber)';
-  }
+[결론] 한 줄 요약
+
+※ 참고용 분석, 배팅 손실 책임은 본인에게 있습니다.`;
 }
 
 async function callAI(prompt){
-  const apiKey = getApiKey();
-  const headers = {'Content-Type':'application/json'};
-  // 로컬 실행 시 API 키 필요, claude.ai 환경에서는 키 없이도 작동
-  if(apiKey){ headers['x-api-key'] = apiKey; headers['anthropic-version']='2023-06-01'; }
-
-  let res;
-  try {
-    res = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers,
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,messages:[{role:'user',content:prompt}]})
-    });
-  } catch(e) {
-    throw new Error('NETWORK_ERROR');
-  }
-
-  if(!res.ok){
-    const errData = await res.json().catch(()=>({}));
-    if(res.status===401){
-      throw new Error('API_KEY_INVALID');
-    } else if(res.status===403){
-      throw new Error('API_KEY_PERMISSION');
-    } else {
-      throw new Error('API_ERROR_'+res.status);
-    }
-  }
+  const res=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,messages:[{role:'user',content:prompt}]})
+  });
+  if(!res.ok) throw new Error('API_ERROR_'+res.status);
   const data=await res.json();
-  return data.content?.map(b=>b.text||'').join('')||'결과를 가져올 수 없습니다.';
-}
-
-function handleAIError(e, outEl){
-  if(e.message==='NETWORK_ERROR'){
-    outEl.style.display='block';
-    outEl.style.borderColor='var(--red)';
-    outEl.innerHTML=`<span style="color:var(--red);font-weight:700">⚠ 네트워크 오류</span>\n\n로컬 파일로 실행 중이라 브라우저가 API 요청을 차단했습니다.\n\n<strong style="color:var(--amber)">해결 방법:</strong>\n1. 위의 🔑 API 키 설정란에 Anthropic API 키를 입력하세요\n   → <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:var(--blue)">console.anthropic.com</a> 에서 무료 발급 가능\n2. API 키 저장 후 다시 분석 실행`;
-  } else if(e.message==='API_KEY_INVALID'){
-    outEl.style.display='block';
-    outEl.innerHTML=`<span style="color:var(--red)">✗ API 키가 유효하지 않습니다.</span>\n키를 다시 확인해주세요.`;
-  } else {
-    outEl.style.display='block';
-    outEl.innerHTML=`<span style="color:var(--red)">오류: ${e.message}</span>\n잠시 후 다시 시도해주세요.`;
-  }
+  return data.content?.map(b=>b.text||'').join('')||'결과 없음';
 }
 
 async function runAutoSingle(){
@@ -909,93 +1082,70 @@ async function runAutoSingle(){
   const g=TODAY_GAMES[idx];
   const btn=document.getElementById('auto-btn');
   const out=document.getElementById('auto-result');
-  btn.disabled=true; btn.innerHTML='<span class="spin"></span>AI 분석 중...';
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span>분석 중...';
   out.style.display='block'; out.textContent='';
   try{
-    const result = await callAI(buildPrompt(g,line,cfg.bankroll));
-    out.style.borderColor='var(--blue-dim)';
+    const result=await callAI(buildPrompt(g,line,cfg.bankroll));
     out.textContent=result;
-  } catch(e){ handleAIError(e, out); }
-  btn.disabled=false; btn.innerHTML='단일 경기 AI 분석 실행';
+    out.style.borderColor='var(--blue-dim)';
+  }catch(e){
+    out.textContent='API 키가 필요합니다. GitHub에 배포된 버전에서는 Claude.ai 환경에서 자동으로 작동합니다.';
+    out.style.borderColor='var(--red)';
+  }
+  btn.disabled=false; btn.innerHTML='단일 경기 AI 분석';
 }
 
 async function runAutoAll(){
   const line=parseFloat(document.getElementById('auto-line')?.value)||7.5;
   const btn=document.getElementById('auto-all-btn');
   const container=document.getElementById('auto-all-results');
-
-  // API 키 미설정 시 안내
-  if(!getApiKey()){
-    container.innerHTML=`<div style="background:var(--red-dim);border:1px solid var(--red);border-radius:var(--r);padding:16px 18px;font-size:13px;line-height:1.8">
-      <strong style="color:var(--red)">⚠ API 키가 설정되지 않았습니다</strong><br><br>
-      위의 🔑 <strong style="color:var(--amber)">API 키 설정란</strong>에 Anthropic API 키를 입력하고 저장해주세요.<br><br>
-      <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:var(--blue);text-decoration:underline">console.anthropic.com</a> 에서 무료로 API 키를 발급받을 수 있습니다.
-    </div>`;
-    return;
-  }
-
-  btn.disabled=true; btn.innerHTML='<span class="spin"></span>전 경기 분석 중... (약 30초)';
-  container.innerHTML=`<div style="color:var(--text3);font-size:12px;font-family:var(--mono);padding:10px">오늘 5경기를 순서대로 분석합니다...</div>`;
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span>분석 중... (약 40초)';
+  container.innerHTML=`<div style="color:var(--text3);font-size:12px;font-family:var(--mono);padding:10px">5경기 순서대로 분석합니다...</div>`;
   let html='';
   for(let i=0;i<TODAY_GAMES.length;i++){
     const g=TODAY_GAMES[i];
     const sig=sigInfo(g,line);
+    const {uOdds,oOdds}=calcOdds(g,line);
     container.innerHTML=`<div style="color:var(--blue);font-size:12px;font-family:var(--mono);padding:10px">${i+1}/5 분석 중: ${g.home} vs ${g.away}...</div>`+html;
     try{
       const result=await callAI(buildPrompt(g,line,cfg.bankroll));
-      const {uOdds,oOdds}=calcOdds(g,line);
       html=`<div class="card" style="border:1px solid ${sig.rec==='UNDER'?'var(--blue2)':sig.rec==='OVER'?'var(--red)':'var(--border)'}">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px">
           <div style="font-weight:700;font-size:14px">${g.home} vs ${g.away}</div>
           <div style="display:flex;gap:8px;align-items:center">
             <span class="badge ${sig.cls}">${sig.label}</span>
-            <span style="font-size:11px;color:var(--text3);font-family:var(--mono)">${g.venue} · ${g.time}</span>
+            <span style="font-size:10px;color:var(--text3);font-family:var(--mono)">${g.venue} · 신뢰도 ${sig.conf}%</span>
           </div>
         </div>
-        <div class="ai-pick-box">
-          <div>
-            <div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:4px">AI 추천 픽</div>
-            <div class="ai-pick-main" style="color:${sig.rec==='UNDER'?'var(--blue)':sig.rec==='OVER'?'var(--red)':'var(--text3)'}">
-              ${sig.rec==='UNDER'?'UNDER '+line:sig.rec==='OVER'?'OVER '+line:'PASS'}
-            </div>
-          </div>
-          <div style="display:flex;gap:14px">
-            <div style="text-align:center"><div style="font-size:10px;color:var(--text3);font-family:var(--mono)">언더 배당</div><div style="font-size:18px;font-weight:700;font-family:var(--mono);color:var(--blue)">${uOdds}</div></div>
-            <div style="text-align:center"><div style="font-size:10px;color:var(--text3);font-family:var(--mono)">오버 배당</div><div style="font-size:18px;font-weight:700;font-family:var(--mono);color:var(--red)">${oOdds}</div></div>
-          </div>
+        <div style="display:flex;gap:16px;margin-bottom:10px;padding:10px;background:var(--bg3);border-radius:var(--r)">
+          <div style="text-align:center"><div style="font-size:10px;color:var(--text3);font-family:var(--mono)">AI 추천</div><div style="font-size:18px;font-weight:700;font-family:var(--mono);color:${sig.rec==='UNDER'?'var(--blue)':sig.rec==='OVER'?'var(--red)':'var(--text3)'}">${sig.rec==='UNDER'?'UNDER':sig.rec==='OVER'?'OVER':'PASS'}</div></div>
+          <div style="text-align:center"><div style="font-size:10px;color:var(--text3);font-family:var(--mono)">언더 배당</div><div style="font-size:18px;font-weight:700;font-family:var(--mono);color:var(--blue)">${uOdds}</div></div>
+          <div style="text-align:center"><div style="font-size:10px;color:var(--text3);font-family:var(--mono)">오버 배당</div><div style="font-size:18px;font-weight:700;font-family:var(--mono);color:var(--red)">${oOdds}</div></div>
         </div>
-        <div style="background:var(--bg3);border-radius:var(--r);padding:13px;margin-top:10px;font-size:12px;line-height:1.75;white-space:pre-line;color:var(--text2)">${result}</div>
-        <div class="bet-btns" style="margin-top:10px">
-          <div class="bet-btn" onclick="addPick(${g.id},'under',${uOdds});showTab('today',document.querySelector('.tab.on'))">언더 배팅 추가</div>
-          <div class="bet-btn" onclick="addPick(${g.id},'over',${oOdds});showTab('today',document.querySelector('.tab.on'))">오버 배팅 추가</div>
-        </div>
+        <div style="font-size:12px;line-height:1.75;white-space:pre-line;color:var(--text2);background:var(--bg3);padding:12px;border-radius:var(--r)">${result}</div>
+        ${virtualMode?`<div class="bet-btns" style="margin-top:10px">
+          <div class="bet-btn" onclick="quickVirtualBet(${g.id},'UNDER',${uOdds},${sig.conf})">가상 언더 등록</div>
+          <div class="bet-btn" onclick="quickVirtualBet(${g.id},'OVER',${oOdds},${sig.conf})">가상 오버 등록</div>
+        </div>`:''}
       </div>`+html;
     }catch(e){
-      let errMsg='오류가 발생했습니다.';
-      if(e.message==='NETWORK_ERROR'||e.message==='API_KEY_INVALID'){
-        errMsg='API 키를 확인해주세요. 위의 🔑 설정란에서 키를 저장 후 다시 시도하세요.';
-        // 첫 오류에서 나머지 분석 중단
-        html=`<div class="card" style="border-color:var(--red)"><div style="color:var(--red);font-weight:700;margin-bottom:6px">⚠ AI 연결 오류 — 분석이 중단되었습니다</div><div style="font-size:12px;color:var(--text3);line-height:1.7">${errMsg}</div></div>`+html;
-        break;
-      }
-      html=`<div class="card"><div style="color:var(--amber);font-size:12px;font-weight:700">${g.home} vs ${g.away}</div><div style="font-size:11px;color:var(--text3);margin-top:4px">${errMsg}</div></div>`+html;
+      html=`<div class="card"><div style="color:var(--amber);font-size:12px">${g.home} vs ${g.away} — API 연결 필요</div></div>`+html;
     }
     await new Promise(r=>setTimeout(r,800));
   }
-  const allDone=!html.includes('중단');
-  container.innerHTML=`<div style="color:${allDone?'var(--green)':'var(--amber)'};font-size:12px;font-family:var(--mono);padding:8px 0 12px">${allDone?'✓ 전 경기 분석 완료':'⚠ 분석 중단 — API 키 설정 후 재시도'}</div>`+html;
+  container.innerHTML=`<div style="color:var(--green);font-size:12px;font-family:var(--mono);padding:8px 0 12px">✓ 전 경기 분석 완료</div>`+html;
   btn.disabled=false; btn.innerHTML='전 경기 일괄 AI 분석';
 }
 
-// ─────────────────────────────────────────
-// 켈리 계산기
-// ─────────────────────────────────────────
+// ───────────────────────────────────────
+// 켈리
+// ───────────────────────────────────────
 function calcKelly(){
   const bank=parseFloat(document.getElementById('k-bank').value)||500000;
   const prob=parseFloat(document.getElementById('k-prob').value)/100||0.62;
   const odds=parseFloat(document.getElementById('k-odds').value)||1.85;
   const frac=parseFloat(document.getElementById('k-frac').value)||0.5;
-  const b=odds-1, q=1-prob;
+  const b=odds-1,q=1-prob;
   const kelly=Math.max(0,(b*prob-q)/b);
   const edge=((prob*odds)-1)*100;
   const adj=kelly*frac;
@@ -1014,10 +1164,10 @@ function calcKelly(){
   bar.style.background=edge>5?'var(--green)':edge>0?'var(--blue)':edge>-5?'var(--amber)':'var(--red)';
   document.getElementById('k-bar-pct').textContent=(adj*100).toFixed(1)+'%';
   const sig=document.getElementById('k-signal');
-  if(edge>=10){sig.textContent='▲ 강한 배팅 신호 — 엣지 충분';sig.style.background='var(--green-dim)';sig.style.color='var(--green)';}
-  else if(edge>=3){sig.textContent='▲ 배팅 고려 — 엣지 있음';sig.style.background='var(--blue-dim)';sig.style.color='var(--blue)';}
-  else if(edge>=0){sig.textContent='— 중립 — 엣지 미미, 자제 권장';sig.style.background='var(--bg3)';sig.style.color='var(--text3)';}
-  else{sig.textContent='▼ 배팅 금지 — 음수 엣지 (기대손실)';sig.style.background='var(--red-dim)';sig.style.color='var(--red)';}
+  if(edge>=10){sig.textContent='▲ 강한 배팅 신호';sig.style.background='var(--green-dim)';sig.style.color='var(--green)';}
+  else if(edge>=3){sig.textContent='▲ 배팅 고려 가능';sig.style.background='var(--blue-dim)';sig.style.color='var(--blue)';}
+  else if(edge>=0){sig.textContent='— 중립 (배팅 자제)';sig.style.background='var(--bg3)';sig.style.color='var(--text3)';}
+  else{sig.textContent='▼ 배팅 금지 (음수 엣지)';sig.style.background='var(--red-dim)';sig.style.color='var(--red)';}
   runSim(bank,prob,odds,adj);
 }
 
@@ -1025,28 +1175,27 @@ function runSim(bank,prob,odds,kf){
   bank=bank||parseFloat(document.getElementById('k-bank').value)||500000;
   prob=prob||parseFloat(document.getElementById('k-prob').value)/100;
   odds=odds||parseFloat(document.getElementById('k-odds').value);
-  kf=kf||parseFloat(document.getElementById('k-frac').value)*Math.max(0,((odds-1)*prob-(1-prob))/(odds-1));
-  const N=100; const b=odds-1;
-  const exp=[bank]; let c=bank;
+  kf=kf||0.1;
+  const N=100,b=odds-1;
+  const exp=[bank];let c=bank;
   for(let i=0;i<N;i++){c=c*(1+kf*(prob*odds-1));exp.push(Math.round(c));}
-  const opt=[bank]; c=bank;
+  const opt=[bank];c=bank;
   for(let i=0;i<N;i++){const r=Math.random()<(prob+0.08)?b:-1;c=Math.max(0,c+c*kf*r);opt.push(Math.round(c));}
-  const pes=[bank]; c=bank;
+  const pes=[bank];c=bank;
   for(let i=0;i<N;i++){const r=Math.random()<Math.max(0.3,prob-0.12)?b:-1;c=Math.max(0,c+c*kf*r);pes.push(Math.round(c));}
-  const fin=exp[N]; const minP=Math.min(...pes); const dd=Math.round((bank-minP)/bank*100);
-  document.getElementById('sim-final').textContent=fmt(fin)+'원';
-  document.getElementById('sim-final').parentElement.className='mc '+(fin>=bank?'up':'dn');
-  document.getElementById('sim-dd').textContent='-'+dd+'%';
+  document.getElementById('sim-final').textContent=fmt(exp[N])+'원';
+  document.getElementById('sim-final').parentElement.className='mc '+(exp[N]>=bank?'up':'dn');
+  const minP=Math.min(...pes);
+  document.getElementById('sim-dd').textContent='-'+Math.round((bank-minP)/bank*100)+'%';
   document.getElementById('sim-ruin').textContent=pes.some((v,i)=>i>0&&v<bank*0.5)?'높음':'낮음';
   DC('simChart');
   CHARTS['simChart']=new Chart(document.getElementById('simChart'),{
     type:'line',
-    data:{labels:Array.from({length:N+1},(_,i)=>i%10===0?i+'회':''),
-      datasets:[
-        {label:'기대값',data:exp,borderColor:'#4d9fff',backgroundColor:'transparent',tension:0.3,pointRadius:0,borderWidth:2},
-        {label:'낙관',data:opt,borderColor:'#3ddc84',backgroundColor:'transparent',tension:0.3,pointRadius:0,borderWidth:1.5,borderDash:[5,5]},
-        {label:'비관',data:pes,borderColor:'#ff5f5f',backgroundColor:'transparent',tension:0.3,pointRadius:0,borderWidth:1.5,borderDash:[5,5]},
-      ]},
+    data:{labels:Array.from({length:N+1},(_,i)=>i%10===0?i+'회':''),datasets:[
+      {data:exp,borderColor:'#4d9fff',backgroundColor:'transparent',tension:0.3,pointRadius:0,borderWidth:2},
+      {data:opt,borderColor:'#3ddc84',backgroundColor:'transparent',tension:0.3,pointRadius:0,borderWidth:1.5,borderDash:[5,5]},
+      {data:pes,borderColor:'#ff5f5f',backgroundColor:'transparent',tension:0.3,pointRadius:0,borderWidth:1.5,borderDash:[5,5]},
+    ]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{
       y:{ticks:{callback:v=>(v/10000).toFixed(0)+'만',font:{size:10},color:'#5a6480'},grid:{color:'#1c2030'}},
       x:{ticks:{font:{size:10},color:'#5a6480'},grid:{display:false}}
@@ -1055,20 +1204,18 @@ function runSim(bank,prob,odds,kf){
 }
 
 function renderBETable(){
-  const odds=[1.50,1.65,1.75,1.85,1.95,2.10,2.30,2.50];
-  document.getElementById('be-table').innerHTML=odds.map(o=>{
-    const imp=Math.round(100/o); const be10=Math.ceil(10/o); const be20=Math.ceil(20/o);
-    const ok=imp<50?`<span style="color:var(--red)">어려움</span>`:imp<55?`<span style="color:var(--amber)">도전</span>`:`<span style="color:var(--green)">가능</span>`;
-    return`<tr><td style="font-family:var(--mono);font-weight:700">${o}</td><td style="font-family:var(--mono)">${imp}%</td><td style="font-family:var(--mono)">${be10}회</td><td style="font-family:var(--mono)">${be20}회</td><td>${ok}</td></tr>`;
+  document.getElementById('be-table').innerHTML=[1.50,1.65,1.75,1.85,1.95,2.10,2.30,2.50].map(o=>{
+    const imp=Math.round(100/o);
+    return`<tr><td style="font-family:var(--mono);font-weight:700">${o}</td><td style="font-family:var(--mono)">${imp}%</td><td style="font-family:var(--mono)">${Math.ceil(10/o)}회</td><td style="font-family:var(--mono)">${Math.ceil(20/o)}회</td><td><span style="color:${imp<50?'var(--red)':imp<55?'var(--amber)':'var(--green)'}">${imp<50?'어려움':imp<55?'도전':'가능'}</span></td></tr>`;
   }).join('');
 }
 
-// ─────────────────────────────────────────
+// ───────────────────────────────────────
 // 배팅 기록
-// ─────────────────────────────────────────
-function clearRec(){document.getElementById('r-date').value=today();document.getElementById('r-result').value='pending';document.getElementById('r-memo').value='';document.getElementById('r-conf').value=62;}
+// ───────────────────────────────────────
+function clearRec(){document.getElementById('r-date').value=today_();document.getElementById('r-result').value='pending';document.getElementById('r-memo').value='';document.getElementById('r-conf').value=62;}
 
-function addRecord(){
+function buildRecordObj(){
   const date=document.getElementById('r-date').value;
   const game=document.getElementById('r-game').value;
   const type=document.getElementById('r-type').value;
@@ -1079,37 +1226,50 @@ function addRecord(){
   const result=document.getElementById('r-result').value;
   const memo=document.getElementById('r-memo').value;
   const msg=document.getElementById('rec-msg');
-  if(!date||!odds||!amount){msg.textContent='날짜, 배당률, 금액을 입력해주세요.';msg.style.color='var(--red)';return;}
-  records.unshift({id:Date.now(),date,game,type,line,odds,amount,conf,result,memo});
-  LS.set('kbo_recs',records);
-  msg.textContent='✓ 등록 완료';msg.style.color='var(--green)';
-  setTimeout(()=>msg.textContent='',2000);
-  clearRec(); renderRecSummary(); renderRecs(); renderBudget(); populateMonthFilter();
+  if(!date||!odds||!amount){msg.textContent='날짜, 배당률, 금액을 입력해주세요.';msg.style.color='var(--red)';return null;}
+  if(result==='pending'&&amount>cfg.budget&&!virtualMode){msg.textContent='배팅금이 월 한도를 초과합니다.';msg.style.color='var(--amber)';return null;}
+  return {id:Date.now(),date,game,type,line,odds,amount,conf,result,memo,mode:'real'};
+}
+
+function addRecord(){
+  const r=buildRecordObj(); if(!r) return;
+  r.mode=virtualMode?'virtual':'real';
+  records.unshift(r);
+  LS.set('kbo_v2_recs',records);
+  document.getElementById('rec-msg').textContent='✓ 등록 완료';
+  document.getElementById('rec-msg').style.color='var(--green)';
+  setTimeout(()=>document.getElementById('rec-msg').textContent='',2000);
+  clearRec(); renderRecSummary(); renderRecs(); renderGoalBars(); updateVirtualUI(); populateMonthFilter();
 }
 
 function updateResult(id,val){
   const r=records.find(x=>x.id===id);
-  if(r){r.result=val;LS.set('kbo_recs',records);renderRecs();renderRecSummary();renderBudget();}
+  if(r){r.result=val;LS.set('kbo_v2_recs',records);renderRecs();renderRecSummary();renderGoalBars();updateVirtualUI();}
 }
 
 function delRecord(id){
   if(!confirm('삭제하시겠습니까?'))return;
   records=records.filter(r=>r.id!==id);
-  LS.set('kbo_recs',records);renderRecs();renderRecSummary();renderBudget();populateMonthFilter();
+  LS.set('kbo_v2_recs',records);renderRecs();renderRecSummary();renderGoalBars();populateMonthFilter();
 }
 
 function renderRecSummary(){
-  const settled=records.filter(r=>r.result!=='pending');
-  const wins=settled.filter(r=>r.result==='win');
-  const totalBet=records.reduce((s,r)=>s+r.amount,0);
-  const totalPnl=settled.reduce((s,r)=>s+pnl(r),0);
-  const hr=settled.length?Math.round(wins.length/settled.length*100):0;
+  const real=records.filter(r=>r.mode!=='virtual');
+  const virt=records.filter(r=>r.mode==='virtual');
+  const rs=real.filter(r=>r.result!=='pending');
+  const rw=rs.filter(r=>r.result==='win');
+  const vs=virt.filter(r=>r.result!=='pending');
+  const vw=vs.filter(r=>r.result==='win');
+  const totalBet=real.reduce((s,r)=>s+r.amount,0);
+  const totalPnl=rs.reduce((s,r)=>s+pnl(r),0);
+  const rHr=rs.length?Math.round(rw.length/rs.length*100):0;
+  const vHr=vs.length?Math.round(vw.length/vs.length*100):0;
   const roi=totalBet?((totalPnl/totalBet)*100).toFixed(1):0;
   document.getElementById('rec-summary').innerHTML=`
-    <div class="mc"><div class="lbl">총 배팅</div><div class="val bl">${records.length}회</div></div>
-    <div class="mc ${hr>=55?'up':''}"><div class="lbl">적중률</div><div class="val">${hr}%</div><div class="sub">${wins.length}/${settled.length}</div></div>
-    <div class="mc"><div class="lbl">총 배팅금</div><div class="val">${(totalBet/10000).toFixed(0)}만</div></div>
-    <div class="mc ${totalPnl>=0?'up':'dn'}"><div class="lbl">총 손익</div><div class="val">${totalPnl>=0?'+':''}${(totalPnl/10000).toFixed(1)}만</div></div>
+    <div class="mc bl"><div class="lbl">실제 배팅</div><div class="val">${real.length}</div><div class="sub">전체</div></div>
+    <div class="mc ${rHr>=55?'up':''}"><div class="lbl">실제 적중률</div><div class="val">${rHr}%</div><div class="sub">${rw.length}/${rs.length}</div></div>
+    <div class="mc pu"><div class="lbl">가상 적중률</div><div class="val">${vHr}%</div><div class="sub">${vw.length}/${vs.length}</div></div>
+    <div class="mc ${totalPnl>=0?'up':'dn'}"><div class="lbl">실제 손익</div><div class="val">${totalPnl>=0?'+':''}${(totalPnl/10000).toFixed(1)}만</div></div>
     <div class="mc ${parseFloat(roi)>=0?'up':'dn'}"><div class="lbl">ROI</div><div class="val">${roi}%</div></div>`;
 }
 
@@ -1117,7 +1277,7 @@ function populateMonthFilter(){
   const months=[...new Set(records.map(r=>r.date?.slice(0,7)).filter(Boolean))].sort().reverse();
   const sel=document.getElementById('f-month');
   const cur=sel.value;
-  sel.innerHTML='<option value="all">전체 기간</option>'+months.map(m=>`<option value="${m}">${m}</option>`).join('');
+  sel.innerHTML='<option value="all">전체</option>'+months.map(m=>`<option value="${m}">${m}</option>`).join('');
   if(cur&&months.includes(cur))sel.value=cur;
 }
 
@@ -1125,68 +1285,166 @@ function renderRecs(){
   const mf=document.getElementById('f-month').value;
   const rf=document.getElementById('f-result').value;
   const tf=document.getElementById('f-type').value;
+  const mdf=document.getElementById('f-mode').value;
   const recs=records.filter(r=>
     (mf==='all'||r.date?.startsWith(mf))&&
     (rf==='all'||r.result===rf)&&
-    (tf==='all'||r.type===tf)
+    (tf==='all'||r.type===tf)&&
+    (mdf==='all'||(mdf==='real'&&r.mode!=='virtual')||(mdf==='virtual'&&r.mode==='virtual'))
   );
   const tbody=document.getElementById('rec-tbody');
   const empty=document.getElementById('rec-empty');
   if(!recs.length){tbody.innerHTML='';empty.style.display='block';return;}
   empty.style.display='none';
-  const resBadge=r=>r.result==='win'?'<span class="badge b-win">적중</span>':r.result==='lose'?'<span class="badge b-lose">미적중</span>':r.result==='push'?'<span class="badge b-neutral">푸시</span>':'<span class="badge b-pend">미결</span>';
   tbody.innerHTML=recs.map(r=>{
     const p=pnl(r);
+    const rb=r.result==='win'?'<span class="badge b-win">적중</span>':r.result==='lose'?'<span class="badge b-lose">미적중</span>':r.result==='push'?'<span class="badge b-neutral">푸시</span>':'<span class="badge b-pend">미결</span>';
     return`<tr>
       <td style="font-family:var(--mono);font-size:11px">${r.date}<br><span style="color:var(--text3)">${r.date?DOW(r.date)+'요일':''}</span></td>
-      <td style="font-weight:600;font-size:12px">${r.game}</td>
+      <td>${r.mode==='virtual'?'<span class="badge b-virtual">가상</span>':'<span class="badge b-real">실제</span>'}</td>
+      <td style="font-weight:600;font-size:12px;max-width:120px;overflow:hidden;text-overflow:ellipsis">${r.game}</td>
       <td><span class="badge ${r.type==='under'?'b-under':'b-over'}">${r.type==='under'?'언더':'오버'}</span><br><span style="font-size:10px;color:var(--text3);font-family:var(--mono)">${r.line}점</span></td>
-      <td style="font-family:var(--mono)">${r.line}</td>
       <td style="font-family:var(--mono)">${r.odds}</td>
-      <td style="font-family:var(--mono)">${fmt(r.amount)}원</td>
+      <td style="font-family:var(--mono)">${fmt(r.amount)}</td>
       <td style="font-family:var(--mono);color:${r.conf>=65?'var(--green)':r.conf>=55?'var(--amber)':'var(--red)'}">${r.conf}%</td>
-      <td>${resBadge(r)}${r.result==='pending'?`<div style="display:flex;gap:3px;margin-top:4px"><button class="btn-sm" onclick="updateResult(${r.id},'win')" style="color:var(--green)">✓적중</button><button class="btn-sm" onclick="updateResult(${r.id},'lose')" style="color:var(--red)">✗미적중</button></div>`:''}
+      <td>${rb}${r.result==='pending'?`<div style="display:flex;gap:3px;margin-top:4px">
+        <button class="btn-sm" onclick="updateResult(${r.id},'win')" style="color:var(--green)">✓</button>
+        <button class="btn-sm" onclick="updateResult(${r.id},'lose')" style="color:var(--red)">✗</button>
+        <button class="btn-sm" onclick="updateResult(${r.id},'push')" style="color:var(--text3)">P</button>
+      </div>`:''}
       </td>
       <td style="font-family:var(--mono);font-weight:700;color:${p>=0?'var(--green)':'var(--red)'}">${r.result==='pending'?'-':fmtW(p)}</td>
-      <td style="font-size:11px;color:var(--text3);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.memo||'-'}</td>
+      <td style="font-size:11px;color:var(--text3);max-width:80px;overflow:hidden;text-overflow:ellipsis">${r.memo||'-'}</td>
       <td><button class="btn-sm" onclick="delRecord(${r.id})" style="color:var(--red)">삭제</button></td>
     </tr>`;
   }).join('');
 }
 
-// ─────────────────────────────────────────
+// ───────────────────────────────────────
+// 적중률 검증
+// ───────────────────────────────────────
+function renderVerify(){
+  const virts=records.filter(r=>r.mode==='virtual');
+  const reals=records.filter(r=>r.mode!=='virtual');
+  const vs=virts.filter(r=>r.result!=='pending');
+  const rs=reals.filter(r=>r.result!=='pending');
+  const vw=vs.filter(r=>r.result==='win');
+  const rw=rs.filter(r=>r.result==='win');
+  const vHr=vs.length?Math.round(vw.length/vs.length*100):0;
+  const rHr=rs.length?Math.round(rw.length/rs.length*100):0;
+  const vPnl=vs.reduce((s,r)=>s+pnl(r),0);
+  const vRoi=vs.reduce((s,r)=>s+r.amount,0)?((vPnl/vs.reduce((s,r)=>s+r.amount,0))*100).toFixed(1):0;
+
+  document.getElementById('verify-kpi').innerHTML=`
+    <div class="mc pu"><div class="lbl">가상 배팅 수</div><div class="val">${virts.length}</div><div class="sub">목표 50경기 이상</div></div>
+    <div class="mc ${vHr>=57?'up':vHr>=50?'am':'dn'}"><div class="lbl">가상 적중률</div><div class="val">${vHr}%</div><div class="sub">목표 57% 이상</div></div>
+    <div class="mc ${parseFloat(vRoi)>=0?'up':'dn'}"><div class="lbl">가상 ROI</div><div class="val">${vRoi}%</div></div>
+    <div class="mc ${rHr>=55?'up':''}"><div class="lbl">실제 적중률</div><div class="val">${rHr}%</div><div class="sub">${rw.length}/${rs.length}</div></div>`;
+
+  // 가상 vs 실제 차트
+  DC('verifyChart');
+  const months=[...new Set([...virts,...reals].map(r=>r.date?.slice(0,7)).filter(Boolean))].sort();
+  if(months.length){
+    const vMonthHr=months.map(m=>{const mr=vs.filter(r=>r.date?.startsWith(m));const mw=mr.filter(r=>r.result==='win');return mr.length?Math.round(mw.length/mr.length*100):null;});
+    const rMonthHr=months.map(m=>{const mr=rs.filter(r=>r.date?.startsWith(m));const mw=mr.filter(r=>r.result==='win');return mr.length?Math.round(mw.length/mr.length*100):null;});
+    CHARTS['verifyChart']=new Chart(document.getElementById('verifyChart'),{
+      type:'line',
+      data:{labels:months,datasets:[
+        {label:'가상',data:vMonthHr,borderColor:'#a78bfa',backgroundColor:'transparent',tension:0.3,pointRadius:5,borderWidth:2},
+        {label:'실제',data:rMonthHr,borderColor:'#00d4ff',backgroundColor:'transparent',tension:0.3,pointRadius:5,borderWidth:2},
+        {label:'목표(57%)',data:Array(months.length).fill(57),borderColor:'#ffb84d',backgroundColor:'transparent',pointRadius:0,borderWidth:1.5,borderDash:[6,4]},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{
+        y:{min:30,max:80,ticks:{callback:v=>v+'%',font:{size:10},color:'#5a6480'},grid:{color:'#1c2030'}},
+        x:{ticks:{font:{size:10},color:'#5a6480'},grid:{display:false}}
+      }}
+    });
+  }
+
+  // 신뢰도별 검증
+  document.getElementById('verify-conf').innerHTML=[[55,65],[65,75],[75,100]].map(([lo,hi])=>{
+    const band=vs.filter(r=>r.conf>=lo&&r.conf<(hi===100?101:hi));
+    const bw=band.filter(r=>r.result==='win');
+    const h=band.length?Math.round(bw.length/band.length*100):0;
+    const target=lo>=75?62:lo>=65?59:56;
+    return`<div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:12px;font-family:var(--mono)">신뢰도 ${lo}~${hi===100?'100':hi}%</span>
+        <span style="font-size:11px;font-family:var(--mono);color:${h>=target?'var(--green)':h>0?'var(--amber)':'var(--text3)'}">
+          ${band.length}경기 · 적중 ${h}% ${h>=target?'✓ 목표달성':''}
+        </span>
+      </div>
+      <div class="prog"><div class="prog-fill" style="width:${h}%;background:${h>=target?'var(--green)':h>0?'var(--amber)':'var(--text3)'}"></div></div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px;font-family:var(--mono)">목표: ${target}% 이상</div>
+    </div>`;
+  }).join('');
+
+  // 실제 배팅 시작 권고
+  const ready = virts.length>=50 && vHr>=57;
+  const halfReady = virts.length>=30 && vHr>=55;
+  document.getElementById('readiness-check').innerHTML=`
+    <div style="padding:14px;background:${ready?'var(--green-dim)':halfReady?'var(--amber-dim)':'var(--red-dim)'};border-radius:var(--r);border:1px solid ${ready?'var(--green)':halfReady?'var(--amber)':'var(--red)'};margin-bottom:12px">
+      <div style="font-size:14px;font-weight:700;color:${ready?'var(--green)':halfReady?'var(--amber)':'var(--red)'};margin-bottom:8px">
+        ${ready?'✓ 실제 배팅 시작 가능':halfReady?'△ 조건 일부 충족':'✗ 아직 실제 배팅 불가'}
+      </div>
+      <div style="font-size:12px;line-height:1.7;color:var(--text2)">
+        ${ready?'가상 배팅 50회 이상, 적중률 57% 이상 달성! 소액 실제 배팅을 시작해볼 수 있습니다.':
+          halfReady?`가상 배팅 ${virts.length}/50회, 적중률 ${vHr}/57%. 조금 더 가상 배팅을 쌓아보세요.`:
+          `가상 배팅 ${virts.length}/50회, 적중률 ${vHr}/57%. 더 많은 가상 배팅이 필요합니다.`}
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);line-height:1.7;font-family:var(--mono)">
+      ■ 가상 배팅: ${virts.length}/50경기 (${Math.round(virts.length/50*100)}%)<br>
+      ■ 가상 적중률: ${vHr}/57% ${vHr>=57?'✓':''}<br>
+      ■ 실제 배팅: ${reals.length}경기 (적중률 ${rHr}%)
+    </div>`;
+
+  // 캘리브레이션
+  document.getElementById('calibration-tbody').innerHTML=[[50,60],[60,65],[65,70],[70,80],[80,100]].map(([lo,hi])=>{
+    const band=vs.filter(r=>r.conf>=lo&&r.conf<(hi===100?101:hi));
+    const bw=band.filter(r=>r.result==='win');
+    const actual=band.length?Math.round(bw.length/band.length*100):null;
+    const mid=Math.round((lo+hi)/2);
+    const diff=actual!==null?actual-mid:null;
+    return`<tr>
+      <td style="font-family:var(--mono)">${lo}~${hi===100?'100':hi}%</td>
+      <td style="font-family:var(--mono)">${band.length}</td>
+      <td style="font-family:var(--mono)">${bw.length}</td>
+      <td style="font-family:var(--mono);color:${actual!==null?(actual>=mid?'var(--green)':'var(--red)'):'var(--text3)'}">${actual!==null?actual+'%':'-'}</td>
+      <td style="font-family:var(--mono);color:${diff!==null?(Math.abs(diff)<=5?'var(--green)':Math.abs(diff)<=10?'var(--amber)':'var(--red)'):'var(--text3)'}">${diff!==null?(diff>=0?'+':'')+diff+'%':'-'}</td>
+      <td>${diff===null?'-':Math.abs(diff)<=5?'<span style="color:var(--green)">정확</span>':Math.abs(diff)<=10?'<span style="color:var(--amber)">보통</span>':'<span style="color:var(--red)">부정확</span>'}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ───────────────────────────────────────
 // 성과 분석
-// ─────────────────────────────────────────
+// ───────────────────────────────────────
 function renderStats(){
-  const settled=records.filter(r=>r.result!=='pending');
+  const recs=records.filter(r=>r.mode!=='virtual');
+  const settled=recs.filter(r=>r.result!=='pending');
   const wins=settled.filter(r=>r.result==='win');
-  const totalBet=records.reduce((s,r)=>s+r.amount,0);
+  const totalBet=recs.reduce((s,r)=>s+r.amount,0);
   const totalPnl=settled.reduce((s,r)=>s+pnl(r),0);
   const hr=settled.length?Math.round(wins.length/settled.length*100):0;
   const roi=totalBet?((totalPnl/totalBet)*100):0;
-  let maxW=0,cW=0,maxL=0,cL=0;
-  settled.forEach(r=>{if(r.result==='win'){cW++;maxW=Math.max(maxW,cW);cL=0;}else{cL++;maxL=Math.max(maxL,cL);cW=0;}});
+  let mxW=0,cW=0,mxL=0,cL=0;
+  settled.forEach(r=>{if(r.result==='win'){cW++;mxW=Math.max(mxW,cW);cL=0;}else{cL++;mxL=Math.max(mxL,cL);cW=0;}});
   document.getElementById('stats-kpi').innerHTML=`
-    <div class="mc ${hr>=55?'up':''}"><div class="lbl">전체 적중률</div><div class="val">${hr}%</div><div class="sub">${wins.length}/${settled.length}</div></div>
+    <div class="mc ${hr>=55?'up':''}"><div class="lbl">적중률</div><div class="val">${hr}%</div><div class="sub">${wins.length}/${settled.length}</div></div>
     <div class="mc ${roi>=0?'up':'dn'}"><div class="lbl">ROI</div><div class="val">${roi>=0?'+':''}${roi.toFixed(1)}%</div></div>
     <div class="mc ${totalPnl>=0?'up':'dn'}"><div class="lbl">총 손익</div><div class="val">${totalPnl>=0?'+':''}${(totalPnl/10000).toFixed(1)}만</div></div>
-    <div class="mc bl"><div class="lbl">최대 연속 적중</div><div class="val">${maxW}연속</div></div>`;
-  // 월별 차트
-  const months=[...new Set(records.map(r=>r.date?.slice(0,7)).filter(Boolean))].sort();
-  const mpnl=months.map(m=>records.filter(r=>r.date?.startsWith(m)&&r.result!=='pending').reduce((s,r)=>s+pnl(r),0));
+    <div class="mc bl"><div class="lbl">최대 연속 적중</div><div class="val">${mxW}연속</div></div>`;
+  const months=[...new Set(recs.map(r=>r.date?.slice(0,7)).filter(Boolean))].sort();
+  const mpnl=months.map(m=>recs.filter(r=>r.date?.startsWith(m)&&r.result!=='pending').reduce((s,r)=>s+pnl(r),0));
   DC('monthly-chart');
   if(months.length){CHARTS['monthly-chart']=new Chart(document.getElementById('monthly-chart'),{
-    type:'bar',data:{labels:months,datasets:[{label:'손익',data:mpnl,backgroundColor:mpnl.map(v=>v>=0?'rgba(61,220,132,.7)':'rgba(255,95,95,.7)'),borderColor:mpnl.map(v=>v>=0?'#3ddc84':'#ff5f5f'),borderWidth:1}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>(v/10000).toFixed(0)+'만',font:{size:10},color:'#5a6480'},grid:{color:'#1c2030'}},x:{ticks:{font:{size:10},color:'#5a6480'},grid:{display:false}}}}
+    type:'bar',data:{labels:months,datasets:[{data:mpnl,backgroundColor:mpnl.map(v=>v>=0?'rgba(61,220,132,.7)':'rgba(255,95,95,.7)'),borderColor:mpnl.map(v=>v>=0?'#3ddc84':'#ff5f5f'),borderWidth:1}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{
+      y:{ticks:{callback:v=>(v/10000).toFixed(0)+'만',font:{size:10},color:'#5a6480'},grid:{color:'#1c2030'}},
+      x:{ticks:{font:{size:10},color:'#5a6480'},grid:{display:false}}
+    }}
   });}
-  // 언더/오버 성과
-  ['under','over'].forEach(tp=>{
-    const tr=settled.filter(r=>r.type===tp);
-    const tw=tr.filter(r=>r.result==='win');
-    const h=tr.length?Math.round(tw.length/tr.length*100):0;
-    const p=tr.reduce((s,r)=>s+pnl(r),0);
-    return h;
-  });
   document.getElementById('type-stats').innerHTML=['under','over'].map(tp=>{
     const tr=settled.filter(r=>r.type===tp);
     const tw=tr.filter(r=>r.result==='win');
@@ -1194,15 +1452,12 @@ function renderStats(){
     const p=tr.reduce((s,r)=>s+pnl(r),0);
     return`<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span class="badge ${tp==='under'?'b-under':'b-over'}">${tp==='under'?'언더':'오버'}</span><span style="font-size:11px;color:var(--text3);font-family:var(--mono)">${tr.length}경기 · ${h}%</span></div><div class="prog"><div class="prog-fill" style="width:${h}%;background:${tp==='under'?'var(--blue)':'var(--red)'}"></div></div><div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:3px">손익: <span style="color:${p>=0?'var(--green)':'var(--red)'};font-weight:700">${fmtW(p)}</span></div></div>`;
   }).join('');
-  // 신뢰도별
-  [[0,55],[55,65],[65,75],[75,100]].forEach(([lo,hi])=>{});
   document.getElementById('conf-stats').innerHTML=[[0,55],[55,65],[65,75],[75,100]].map(([lo,hi])=>{
     const band=settled.filter(r=>r.conf>=lo&&r.conf<(hi===100?101:hi));
     const bw=band.filter(r=>r.result==='win');
     const h=band.length?Math.round(bw.length/band.length*100):0;
-    return`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:11px;font-family:var(--mono);color:var(--text2)">신뢰도 ${lo}~${hi===100?'100':hi}%</span><span style="font-size:11px;font-family:var(--mono);color:var(--text3)">${band.length}경기 · ${h}%</span></div><div class="prog"><div class="prog-fill" style="width:${h}%;background:${h>=60?'var(--green)':h>=50?'var(--blue)':'var(--red)'}"></div></div></div>`;
+    return`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:11px;font-family:var(--mono);color:var(--text2)">${lo}~${hi===100?'100':hi}%</span><span style="font-size:11px;font-family:var(--mono);color:var(--text3)">${band.length}경기 · ${h}%</span></div><div class="prog"><div class="prog-fill" style="width:${h}%;background:${h>=60?'var(--green)':h>=50?'var(--blue)':'var(--red)'}"></div></div></div>`;
   }).join('');
-  // 배당대별
   document.getElementById('odds-stats').innerHTML=[[1,1.6],[1.6,1.8],[1.8,2.0],[2.0,2.5],[2.5,10]].map(([lo,hi])=>{
     const band=settled.filter(r=>r.odds>=lo&&r.odds<hi);
     const bw=band.filter(r=>r.result==='win');
@@ -1210,44 +1465,44 @@ function renderStats(){
     const tb=band.reduce((s,r)=>s+r.amount,0);
     const tp=band.reduce((s,r)=>s+pnl(r),0);
     const roi=tb?((tp/tb)*100).toFixed(1):'-';
-    return`<tr><td style="font-family:var(--mono)">${lo}~${hi===10?'+':hi}</td><td style="font-family:var(--mono)">${band.length}</td><td style="font-family:var(--mono)">${bw.length}</td><td style="font-family:var(--mono);color:${h>=55?'var(--green)':h>=45?'var(--text2)':'var(--red)'}">${h}%</td><td style="font-family:var(--mono)">${fmt(tb)}원</td><td style="font-family:var(--mono);color:${tp>=0?'var(--green)':'var(--red)'}">${fmtW(tp)}</td><td style="font-family:var(--mono);color:${parseFloat(roi)>=0?'var(--green)':'var(--red)'}">${roi}%</td></tr>`;
+    return`<tr><td style="font-family:var(--mono)">${lo}~${hi===10?'+':hi}</td><td>${band.length}</td><td>${bw.length}</td><td style="color:${h>=55?'var(--green)':h>=45?'var(--text2)':'var(--red)'};font-family:var(--mono)">${h}%</td><td style="font-family:var(--mono)">${fmt(tb)}원</td><td style="color:${tp>=0?'var(--green)':'var(--red)'};font-family:var(--mono)">${fmtW(tp)}</td><td style="color:${parseFloat(roi)>=0?'var(--green)':'var(--red)'};font-family:var(--mono)">${roi}%</td></tr>`;
   }).join('');
-  // 요일별
   document.getElementById('weekday-stats').innerHTML=['월','화','수','목','금','토','일'].map(day=>{
     const dr=settled.filter(r=>r.date&&DOW(r.date)===day);
     const dw=dr.filter(r=>r.result==='win');
     const h=dr.length?Math.round(dw.length/dr.length*100):0;
-    return`<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:12px;font-weight:700">${day}요일</span><span style="font-size:11px;color:var(--text3);font-family:var(--mono)">${dr.length}경기 · ${h}%</span></div><div class="prog"><div class="prog-fill" style="width:${h}%;background:${h>=60?'var(--green)':h>=50?'var(--blue)':'var(--red)'}"></div></div></div>`;
+    return`<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:13px;font-weight:700">${day}요일</span><span style="font-size:11px;color:var(--text3);font-family:var(--mono)">${dr.length}경기 · ${h}%</span></div><div class="prog"><div class="prog-fill" style="width:${h}%;background:${h>=60?'var(--green)':h>=50?'var(--blue)':'var(--red)'}"></div></div></div>`;
   }).join('');
 }
 
-// ─────────────────────────────────────────
-// 팀 순위·통계
-// ─────────────────────────────────────────
+// ───────────────────────────────────────
+// 팀 순위
+// ───────────────────────────────────────
 function renderStanding(){
   const teams=Object.values(TEAM_DATA).sort((a,b)=>a.rank-b.rank);
   document.getElementById('standing-list').innerHTML=teams.map(t=>`
-    <div class="rank-row">
-      <div class="rank-num" style="color:${t.rank<=3?'var(--amber)':'var(--text3)'}">${t.rank}</div>
-      <div class="rank-team" style="color:${t.color}">${t.name}</div>
-      <div style="font-family:var(--mono);font-size:12px;color:var(--text2)">${t.w}승 ${t.l}패</div>
-      <div class="rank-val">${(t.w/(t.w+t.l)||0).toFixed(3)}</div>
+    <div style="display:flex;align-items:center;padding:8px 10px;border-bottom:1px solid var(--border)">
+      <div style="font-family:var(--mono);font-size:13px;font-weight:700;min-width:26px;color:${t.rank<=3?'var(--amber)':'var(--text3)'}">${t.rank}</div>
+      <div style="font-weight:700;flex:1;color:${t.color}">${t.name}</div>
+      <div style="font-family:var(--mono);font-size:12px;color:var(--text2)">${t.w}승 ${t.l}패 .${String(Math.round(t.w/(t.w+t.l)*1000)).padStart(3,'0')}</div>
     </div>`).join('');
-  const sortedOu=teams.sort((a,b)=>b.ovr5y-a.ovr5y);
-  document.getElementById('team-ou').innerHTML=sortedOu.map(t=>{
+
+  document.getElementById('team-ou').innerHTML=Object.values(TEAM_DATA).sort((a,b)=>b.ovr5y-a.ovr5y).map(t=>{
     const u=100-t.ovr5y;
-    return`<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:12px;font-weight:700">${t.name}</span><span style="font-size:10px;color:var(--text3);font-family:var(--mono)">오버 ${t.ovr5y}% / 언더 ${u}%</span></div><div class="ou-bar" style="height:20px"><div class="ou-u" style="width:${u}%">${u}%</div><div class="ou-o" style="width:${t.ovr5y}%">${t.ovr5y}%</div></div></div>`;
+    return`<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:12px;font-weight:700">${t.name}</span><span style="font-size:10px;color:var(--text3);font-family:var(--mono)">오버 ${t.ovr5y}% / 언더 ${u}%</span></div><div class="ou-bar" style="height:18px"><div class="ou-u" style="width:${u}%">${u}%</div><div class="ou-o" style="width:${t.ovr5y}%">${t.ovr5y}%</div></div></div>`;
   }).join('');
+
   const line=7.5;
   document.getElementById('game-analysis-table').innerHTML=TODAY_GAMES.map(g=>{
-    const {expTotal,uOdds,oOdds}=calcOdds(g,line);
+    const {hPitcher,aPitcher,hEra,aEra}=getGameEra(g);
+    const {expTotal}=calcOdds(g,line);
     const sig=sigInfo(g,line);
     return`<tr>
       <td style="font-weight:700">${g.home} vs ${g.away}</td>
-      <td style="font-family:var(--mono);color:${g.hEra<3.5?'var(--green)':g.hEra>4.5?'var(--red)':'var(--text2)'}">${g.hEra}</td>
-      <td style="font-family:var(--mono);color:${g.aEra<3.5?'var(--green)':g.aEra>4.5?'var(--red)':'var(--text2)'}">${g.aEra}</td>
-      <td style="font-family:var(--mono)">${g.hOps}</td>
-      <td style="font-family:var(--mono)">${g.aOps}</td>
+      <td style="font-family:var(--mono)">${hPitcher}</td>
+      <td style="font-family:var(--mono);color:${hEra<3.5?'var(--green)':hEra>4.5?'var(--red)':'var(--text2)'}">${hEra}</td>
+      <td style="font-family:var(--mono)">${aPitcher}</td>
+      <td style="font-family:var(--mono);color:${aEra<3.5?'var(--green)':aEra>4.5?'var(--red)':'var(--text2)'}">${aEra}</td>
       <td style="font-family:var(--mono);color:var(--amber)">${expTotal}점</td>
       <td style="color:var(--text3);font-size:11px">${g.venue}</td>
       <td><span class="badge ${sig.cls}">${sig.label}</span></td>
@@ -1255,35 +1510,35 @@ function renderStanding(){
   }).join('');
 }
 
-// ─────────────────────────────────────────
+// ───────────────────────────────────────
 // CSV 내보내기
-// ─────────────────────────────────────────
+// ───────────────────────────────────────
 function exportCSV(){
-  const h=['날짜','경기','픽','기준선','배당률','금액','신뢰도','결과','손익','메모'];
-  const rows=records.map(r=>[r.date,r.game,r.type,r.line,r.odds,r.amount,r.conf,r.result,pnl(r),r.memo||''].join(','));
+  const h=['날짜','모드','경기','픽','기준선','배당률','금액','신뢰도','결과','손익','메모'];
+  const rows=records.map(r=>[r.date,r.mode||'real',r.game,r.type,r.line,r.odds,r.amount,r.conf,r.result,pnl(r),r.memo||''].join(','));
   const csv='\uFEFF'+[h.join(','),...rows].join('\n');
   const a=document.createElement('a');
   a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-  a.download='kbo_betting_'+today()+'.csv';
+  a.download='kbo_v2_'+today_()+'.csv';
   a.click();
 }
 
-// ─────────────────────────────────────────
+// ───────────────────────────────────────
 // 초기화
-// ─────────────────────────────────────────
-document.getElementById('r-date').value=today();
+// ───────────────────────────────────────
+document.getElementById('r-date').value=today_();
 document.getElementById('k-bank').value=cfg.bankroll;
-updateApiKeyStatus();
-renderBudget();
+updateVirtualUI();
+renderGoalBars();
 renderGames();
+renderPitcherInputs();
 renderRecSummary();
 renderRecs();
 populateMonthFilter();
 populateAutoMatches();
 calcKelly();
 renderBETable();
-// 30초마다 예산 새로고침
-setInterval(renderBudget,30000);
+setInterval(renderGoalBars,60000);
 </script>
 </body>
 </html>
